@@ -19,19 +19,21 @@
     var blobberPath = ""
     $(document).ready(function(){
       $.get("path.txt", function(data){
-        blobberPath = data
+        blobberPath = data;
       });
-    })
+    });
     function onSignIn(googleUser) {
-      document.getElementById("output").innerHTML = "signed in!"
+      document.getElementById("output").innerHTML = "signed in!";
     }
     function getGoogleToken() {
+      document.getElementById("output").innerHTML = "";
       var GoogleAuth = gapi.auth2.getAuthInstance();
       var GoogleUsr = GoogleAuth.currentUser.get();
       var id_token = GoogleUsr.getAuthResponse().id_token;
       document.getElementById("output").innerHTML = id_token;
     }
     function newBlobber() {
+      document.getElementById("output").innerHTML = "";
       var httpD = new XMLHttpRequest();
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
@@ -39,12 +41,13 @@
       var id_token = GoogleUsr.getAuthResponse().id_token;
       
       $.get(blobberPath + "putText.py", {"idTkn":id_token, "text":document.getElementById("blob").value, "comment":"false"}, function(data){
-        document.getElementById("output").innerHTML = data
+        document.getElementById("output").innerHTML = data;
       });
 
     }
 
     function newComment() {
+      document.getElementById("output").innerHTML = "";
       var httpD = new XMLHttpRequest();
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
@@ -52,21 +55,23 @@
       var id_token = GoogleUsr.getAuthResponse().id_token;
       
       $.get(blobberPath + "putText.py", {"idTkn":id_token, "text":document.getElementById("blob").value, "comment":"true", "postId":document.getElementById("postId").value}, function(data){
-        document.getElementById("output").innerHTML = data
+        document.getElementById("output").innerHTML = data;
       });
 
     }
 
     function getBlobber() {
+      document.getElementById("output").innerHTML = "";
       var httpD = new XMLHttpRequest();
 
       $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100}, function(data){
-        document.getElementById("output").innerHTML = data
+        document.getElementById("output").innerHTML = data;
       });
 
     }
 
     function voteBlobber(vote) {
+      document.getElementById("output").innerHTML = "";
       var httpD = new XMLHttpRequest();
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
@@ -74,7 +79,7 @@
       var id_token = GoogleUsr.getAuthResponse().id_token;
       
       $.get(blobberPath + "vote.py", {"idTkn":id_token, "postId":document.getElementById("postId").value, "vote":vote}, function(data){
-        document.getElementById("output").innerHTML = data
+        document.getElementById("output").innerHTML = data;
       });
 
     }
