@@ -18,8 +18,8 @@
   <script>
     var blobberPath = ""
     $(document).ready(function(){
-      $.get("path.txt", function(data){
-        blobberPath = data;
+      $.getJSON("files.json", function(data){
+        blobberPath = data["web"];
       });
     });
     function onSignIn(googleUser) {
