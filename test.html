@@ -40,7 +40,7 @@
       var GoogleUsr = GoogleAuth.currentUser.get();
       var id_token = GoogleUsr.getAuthResponse().id_token;
       
-      $.get(blobberPath + "putText.py", {"idTkn":id_token, "text":document.getElementById("blob").value, "comment":"false"}, function(data){
+      $.get(blobberPath + "putText.py", {"idTkn":id_token, "text":document.getElementById("blob").value}, function(data){
         document.getElementById("output").innerHTML = data;
       });
 
@@ -54,7 +54,7 @@
       var GoogleUsr = GoogleAuth.currentUser.get();
       var id_token = GoogleUsr.getAuthResponse().id_token;
       
-      $.get(blobberPath + "putText.py", {"idTkn":id_token, "text":document.getElementById("blob").value, "comment":"true", "postId":document.getElementById("postId").value}, function(data){
+      $.get(blobberPath + "putText.py", {"idTkn":id_token, "text":document.getElementById("blob").value, "comment":document.getElementById("postId").value}, function(data){
         document.getElementById("output").innerHTML = data;
       });
 
