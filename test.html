@@ -34,7 +34,6 @@
     }
     function newBlobber() {
       document.getElementById("output").innerHTML = "";
-      var httpD = new XMLHttpRequest();
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
       var GoogleUsr = GoogleAuth.currentUser.get();
@@ -48,7 +47,6 @@
 
     function newComment() {
       document.getElementById("output").innerHTML = "";
-      var httpD = new XMLHttpRequest();
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
       var GoogleUsr = GoogleAuth.currentUser.get();
@@ -62,7 +60,6 @@
 
     function getBlobber() {
       document.getElementById("output").innerHTML = "";
-      var httpD = new XMLHttpRequest();
 
       $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100}, function(data){
         document.getElementById("output").innerHTML = data.replace(new RegExp("<", 'g'),"&lt;").replace(new RegExp(">", 'g'),"&gt;");
@@ -70,9 +67,17 @@
 
     }
 
+    function getComment() {
+      document.getElementById("output").innerHTML = "";
+
+      $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100, "comment":document.getElementById("postId").value}, function(data){
+        document.getElementById("output").innerHTML = data.replace(new RegExp("<", 'g'),"&lt;").replace(new RegExp(">", 'g'),"&gt;");
+      });
+
+    }
+
     function voteBlobber(vote) {
       document.getElementById("output").innerHTML = "";
-      var httpD = new XMLHttpRequest();
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
       var GoogleUsr = GoogleAuth.currentUser.get();
@@ -100,6 +105,7 @@
   <input id="postId" value="postId" type="text">
   <input type="button" value="upvote" onclick="voteBlobber('up')">
   <input type="button" value="downvote" onclick="voteBlobber('down')">
+  <input type="button" value="get comments" onclick="getComment()">
   <p>Bis jetzt geht nur "hot", später auch "trending", "new" und nach Nutzer</p>
   <input id="sort" value="hot" type="text">
   <input type="button" value="GET" onclick="getBlobber()">
