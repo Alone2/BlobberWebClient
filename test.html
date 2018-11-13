@@ -65,7 +65,7 @@
       var httpD = new XMLHttpRequest();
 
       $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100}, function(data){
-        document.getElementById("output").innerHTML = data;
+        document.getElementById("output").innerHTML = data.replace(new RegExp("<", 'g'),"&lt;").replace(new RegExp(">", 'g'),"&gt;");
       });
 
     }
