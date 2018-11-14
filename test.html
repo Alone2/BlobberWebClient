@@ -61,7 +61,7 @@
     function getBlobber() {
       document.getElementById("output").innerHTML = "";
 
-      $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100}, function(data){
+      $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100, "userId":document.getElementById("postId").value}, function(data){
         document.getElementById("output").innerHTML = data.replace(new RegExp("<", 'g'),"&lt;").replace(new RegExp(">", 'g'),"&gt;");
       });
 
@@ -106,7 +106,7 @@
   <input type="button" value="upvote" onclick="voteBlobber('up')">
   <input type="button" value="downvote" onclick="voteBlobber('down')">
   <input type="button" value="get comments" onclick="getComment()">
-  <p>Bis jetzt geht nur "hot", später auch "trending", "new" und nach Nutzer</p>
+  <p>"hot","new","trending" oder "user"</p>
   <input id="sort" value="hot" type="text">
   <input type="button" value="GET" onclick="getBlobber()">
   <p id="output"></p>
