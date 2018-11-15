@@ -58,6 +58,19 @@
 
     }
 
+    function newUserName() {
+      document.getElementById("output").innerHTML = "";
+
+      var GoogleAuth = gapi.auth2.getAuthInstance();
+      var GoogleUsr = GoogleAuth.currentUser.get();
+      var id_token = GoogleUsr.getAuthResponse().id_token;
+      
+      $.get(blobberPath + "saveUserDat.py", {"idTkn":id_token, "data":"name", "dataValue":document.getElementById("username").value}, function(data){
+        document.getElementById("output").innerHTML = data;
+      });
+
+    }
+
     function getBlobber() {
       document.getElementById("output").innerHTML = "";
 
@@ -99,6 +112,9 @@
   <br />
   <input type="button" value="id token" onclick="getGoogleToken()">
   <br /><br />
+  <input id="username" value="username" type="text">
+  <input type="button" value="new username" onclick="newUserName('up')">
+  <br><br>
   <input id="blob" value="blob" type="text">
   <input type="button" value="SEND" onclick="newBlobber()">
   <input type="button" value="COMMENT" onclick="newComment()">
