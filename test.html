@@ -75,7 +75,12 @@
       document.getElementById("output").innerHTML = "";
 
       $.get(blobberPath + "getText.py", {"sorting":document.getElementById("sort").value, "von":0,"bis":100, "userId":document.getElementById("postId").value}, function(data){
-        document.getElementById("output").innerHTML = data.replace(new RegExp("<", 'g'),"&lt;").replace(new RegExp(">", 'g'),"&gt;");
+        console.log(data);
+        newData = JSON.parse(data.replace(new RegExp("'", 'g'),'"'));
+        for (i = 0; i < newData.length; i++) {
+           document.getElementById("output").innerHTML += newData[i]["text"] + " -" + newData[i]["OP"] + "  ("+ newData[i]["upvotes"] + " upvotes) (id="+newData[i]["id"]+ ") <br>";
+        }
+        
       });
 
     }
