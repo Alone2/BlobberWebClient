@@ -78,7 +78,8 @@
         console.log(data);
         newData = JSON.parse(data.replace(new RegExp("'", 'g'),'"'));
         for (i = 0; i < newData.length; i++) {
-           document.getElementById("output").innerHTML += newData[i]["text"] + " -" + newData[i]["OP"] + "  ("+ newData[i]["upvotes"] + " upvotes) (id="+newData[i]["id"]+ ") <br>";
+           document.getElementById("output").innerHTML += newData[i]["text"].replace(new RegExp("<", 'g'),'') + " -" + newData[i]["OP"].replace(new RegExp("<", 'g'),'') + "  ("+ newData[i]["upvotes"] + " upvotes) (id="+newData[i]["id"]+ ")";
+           document.getElementById("output").innerHTML += '<input type="button" value="upvote" onclick="voteBlobber(\'up\',\'' +  newData[i]["id"]  + '\')"><input type="button" value="downvote" onclick="voteBlobber(\'down\',\'' +  newData[i]["id"]  + '\')"><br>';
         }
         
       });
@@ -94,14 +95,14 @@
 
     }
 
-    function voteBlobber(vote) {
+    function voteBlobber(vote , postId) {
       document.getElementById("output").innerHTML = "";
 
       var GoogleAuth = gapi.auth2.getAuthInstance();
       var GoogleUsr = GoogleAuth.currentUser.get();
       var id_token = GoogleUsr.getAuthResponse().id_token;
       
-      $.get(blobberPath + "vote.py", {"idTkn":id_token, "postId":document.getElementById("postId").value, "vote":vote}, function(data){
+      $.get(blobberPath + "vote.py", {"idTkn":id_token, "postId":postId, "vote":vote}, function(data){
         document.getElementById("output").innerHTML = data;
       });
 
@@ -124,8 +125,8 @@
   <input type="button" value="SEND" onclick="newBlobber()">
   <input type="button" value="COMMENT" onclick="newComment()">
   <input id="postId" value="postId" type="text">
-  <input type="button" value="upvote" onclick="voteBlobber('up')">
-  <input type="button" value="downvote" onclick="voteBlobber('down')">
+  <input type="button" value="upvote" onclick="voteBlobber('up',document.getElementById('postId').value)">
+  <input type="button" value="downvote" onclick="voteBlobber('down', document.getElementById('postId').value)">
   <input type="button" value="get comments" onclick="getComment()">
   <p>"hot","new","trending" oder "user"</p>
   <input id="sort" value="hot" type="text">
