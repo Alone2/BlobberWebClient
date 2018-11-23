@@ -69,6 +69,7 @@ function getBlobber(sorting) {
     $.get(blobberPath + "getText.py", { "sorting": sorting, "von": 0, "bis": 100 }, function (data) {
         console.log(data);
         newData = JSON.parse(data.replace(new RegExp("'", 'g'), '"'));
+        newData.reverse();
         for (i = 0; i < newData.length; i++) {
             a = '<br/><div class="content">' + " &lt;" + newData[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "> <br />" + newData[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " (" + newData[i]["upvotes"] + " upvotes) ";
             b = '<br/><input type="button" value="upvote" onclick="voteBlobber(\'up\',\'' + newData[i]["id"] + '\')"> <input type="button" value="downvote" onclick="voteBlobber(\'down\',\'' + newData[i]["id"] + '\')"><br>';
@@ -76,6 +77,17 @@ function getBlobber(sorting) {
             document.getElementById("contentHolder").innerHTML += a + b + c;
         }
 
+    });
+
+}
+
+function voteBlobber(vote, postId) {
+    var GoogleAuth = gapi.auth2.getAuthInstance();
+    var GoogleUsr = GoogleAuth.currentUser.get();
+    var id_token = GoogleUsr.getAuthResponse().id_token;
+
+    $.get(blobberPath + "vote.py", { "idTkn": id_token, "postId": postId, "vote": vote }, function (data) {
+        console.log(data)
     });
 
 }
