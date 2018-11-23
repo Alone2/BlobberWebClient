@@ -3,6 +3,7 @@
 
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="google-signin-client_id" content="275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com">
 
     <title id="title">Kalender</title>
     <link rel="icon" href="http://21mb.bundr.net/pics/blobber-icon2.svg" />
@@ -22,21 +23,19 @@
 <body>
     <div id="banner" class="banner">
         <titu>Blobber (alpha)</titu>
-        <a class="logIn" onclick="signIn()">Einloggen</a> 
+        <a id="log" class="logIn" onclick="alertBox()">Einloggen</a> 
     </div>
     <div class="gradient"></div>
 
     <div id="alertBox">
             Logge dich mit Google ein: <br/><br/>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>          
+            <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
     </div>
 
     <div id="contentHolder" style="padding:16px">
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <div class="content">Hey</div>
     </div>
 
-    
 </body>
 
 </html>

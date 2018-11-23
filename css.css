@@ -57,7 +57,7 @@ body {
 }
 
 .banner a.logOut:hover {
-    background-color: #81F79F;
+    background-color: rgb(243, 151, 151);
 }
 
 .gradient {
