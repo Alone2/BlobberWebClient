@@ -96,3 +96,10 @@ body {
 	left: 0;
 	right: 0;	
 }
+
+#blobInput {
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    background-color: rgba(243, 243, 243, 0)
+}

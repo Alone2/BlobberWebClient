@@ -25,7 +25,7 @@
         <titu>Blobber (alpha)</titu>
         <a id="log" class="logIn" onclick="alertBox()">Einloggen</a> 
     </div>
-    <div class="gradient"></div>
+    <div id="derGradient" class="gradient"></div>
 
     <div id="alertBox">
             Logge dich mit Google ein: <br/><br/>
@@ -33,7 +33,10 @@
     </div>
 
     <div id="contentHolder" style="padding:16px">
-        <div class="content">Hey</div>
+        <div class="content" style="cursor: text;" onclick='$("#blobInput").focus();'>
+            <textarea id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
+            <input type="button" value="send">
+        </div>
     </div>
 
 </body>
