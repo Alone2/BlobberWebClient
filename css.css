@@ -1,0 +1,98 @@
+.transparentClass {
+    background: rgba(255,255,255, 0.5);
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #FAFAFA;
+  margin: 0;
+}
+.banner {
+  border-width: 1px;
+  border-style: none none solid none;
+  border-color: #BFBFBF;
+  overflow: hidden;
+  background-color: #E3E3E3;
+}
+.banner a {
+  float: left;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 30px;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.banner titu {
+  float: left;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 30px;
+}
+
+.banner a:hover {
+    background-color: #D8D8D8;
+    /*animation-duration: 0.3s;
+    animation-name: changeColorGray;*/
+}
+.banner a.logIn {
+    background-color: #A9F5BC;
+    float: right;
+}
+
+.banner a.logIn:hover {
+    background-color: #81F79F;
+    /*animation-duration: 0.3s;
+    animation-name: changeColorRed;*/
+}
+
+.banner a.logOut {
+    background-color: #F5A9A9;
+    float: right;
+}
+
+.banner a.logOut:hover {
+    background-color: #81F79F;
+}
+
+.gradient {
+  height:10px;
+  background: linear-gradient(rgba(0, 0, 0, 0.1) -100%, rgba(255, 255, 255, 0) 100%);
+  position: fixed;
+  z-index: 1;
+}
+
+.content {
+    padding: 15px;
+    border-radius: 5px;
+    background-color: rgb(243, 243, 243);
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(206, 206, 206);
+}
+
+#contentHolder {
+    overflow: auto;
+}
+
+#alertBox {
+    position: fixed;
+	display: none;
+	z-index: 2;
+	
+	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	background-color: #F2F2F2;
+	width: 300px;
+	border: 1px #6E6E6E solid;
+	padding: 20px;
+	margin: 10% auto;
+	left: 0;
+	right: 0;	
+}
