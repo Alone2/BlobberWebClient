@@ -1,7 +1,7 @@
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
-    document.getElementById("log").innerHTML = "⊝";
+    document.getElementById("log").innerHTML = '<img height="40px" src="img/signOut.svg">';
 
     closeAlertBox();
     getBlobber("new");
@@ -75,7 +75,7 @@ function getBlobber(sorting) {
         data = JSON.parse(data);
         data.reverse();
         for (i = 0; i < data.length; i++) {
-            a = '<div id="' + data[i]["id"] + '" class="content">' + " &lt;" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " (" + data[i]["upvotes"] + " upvotes) ";
+            a = '<div id="' + data[i]["id"] + '" class="content">' + " &lt;" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
             bsrc1 = "./img/upvote.svg";
             bsrc2 = "./img/downvote.svg";
             if (data[i]["isUpvoted"] == true) {
@@ -84,16 +84,9 @@ function getBlobber(sorting) {
             if (data[i]["isDownvoted"] == true) {
                 bsrc2 = "./img/downvoted.svg";
             }
-            b = '<br/><img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
+            b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;'+data[i]["upvotes"]+'&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
             c = '</div>';
             document.getElementById("contentHolder").innerHTML += a + b + c;
-
-            /*if (data[i]["isUpvoted"] == true) {
-                //$("#"+newData[i]["id"]).find( "#upvote" ).attr("src", "./img/upvoted.svg");
-            }
-            if (data[i]["isDownvoted"] == true) {
-                //$("#"+newData[i]["id"]).find( "#upvote" ).attr("src", ./img/upvoted.svg);
-            }*/
         }
     });
 

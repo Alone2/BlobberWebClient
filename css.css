@@ -56,8 +56,8 @@ body {
 .banner a.logIn {
     background-color: #A9F5BC;
     float: right;
-    font-family: 'arrow_7';
     font-size: 30.5px;
+    padding: 15px 16px 5px 16px;
 }
 
 .banner a.logIn:hover {
@@ -69,8 +69,8 @@ body {
 .banner a.logOut {
     background-color: #F5A9A9;
     float: right;
-    font-family: 'arrow_7';
-    font-size: 31.5px;
+    font-size: 30.5px;
+    padding: 15px 16px 5px 16px;
 }
 
 .banner a.logOut:hover {
