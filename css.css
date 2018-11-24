@@ -19,7 +19,15 @@ body {
   padding: 14px 16px;
   text-decoration: none;
   font-size: 30px;
+  
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
 
+.pointerStyle {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -69,11 +77,25 @@ body {
 
 .content {
     padding: 15px;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     background-color: rgb(243, 243, 243);
     border: solid;
-    border-width: 1px;
+    border-width: 0px 1px 1px 1px;
     border-color: rgb(206, 206, 206);
+}
+
+.content:hover {
+    background-color: rgb(238, 238, 238);
+}
+
+#write {
+    border-width: 1px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: rgb(223, 223, 223);
+}
+
+#write:hover {
+    background-color: rgb(218, 218, 218);
 }
 
 #contentHolder {
@@ -103,4 +125,5 @@ body {
     font-size: 20px;
     background-color: rgba(243, 243, 243, 0);
     outline: none;
+    overflow:auto
 }
