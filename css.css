@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'arrow_7';
+    src: url('./fonts/arrow_7.ttf')  format('truetype')
+}
+
 .transparentClass {
     background: rgba(255,255,255, 0.5);
 }
@@ -19,7 +24,7 @@ body {
   padding: 14px 16px;
   text-decoration: none;
   font-size: 30px;
-  
+
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -51,6 +56,8 @@ body {
 .banner a.logIn {
     background-color: #A9F5BC;
     float: right;
+    font-family: 'arrow_7';
+    font-size: 30.5px;
 }
 
 .banner a.logIn:hover {
@@ -62,6 +69,8 @@ body {
 .banner a.logOut {
     background-color: #F5A9A9;
     float: right;
+    font-family: 'arrow_7';
+    font-size: 31.5px;
 }
 
 .banner a.logOut:hover {
@@ -108,7 +117,7 @@ body {
 	z-index: 2;
 	
 	text-align: center;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	font-size: 20px;
 	background-color: #F2F2F2;
 	width: 300px;
@@ -121,7 +130,7 @@ body {
 
 #blobInput {
     border: none;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 20px;
     background-color: rgba(243, 243, 243, 0);
     outline: none;
