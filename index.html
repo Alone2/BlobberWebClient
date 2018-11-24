@@ -5,11 +5,15 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <meta name="google-signin-client_id" content="275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com">
 
-    <title id="title">Blobber</title>
-    <link rel="icon" href="http://21mb.bundr.net/pics/blobber-icon2.svg" />
-    <link rel="icon" id="link0" href="http://21mb.bundr.net/pics/blobber-icon2.svg" type="image/x-icon">
     <meta name="viewport" content='width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0'>
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    
+    <title id="title">Blobber</title>
+    <link rel="icon" name="iconName" href="./img/icon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" name="iconName" sizes="57x57" href="./img/icon.png" />
+    <link rel="apple-touch-icon" name="iconName" sizes="72x72" href="./img/icon.png" />
+    <link rel="apple-touch-icon" name="iconName" sizes="114x114" href="./img/icon.png" />
+    <link rel="apple-touch-icon" name="iconName" sizes="144x144" href="./img/icon.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="css.css" rel="stylesheet">
@@ -23,13 +27,13 @@
 <body>
     <div id="banner" class="banner">
         <titu>Blobber (alpha)</titu>
-        <a id="log" class="logIn" onclick="alertBox()">Einloggen</a> 
+        <a id="log" class="logIn" onclick="alertBox()">&ensp;3&ensp;</a>
     </div>
     <div id="derGradient" class="gradient"></div>
 
     <div id="alertBox">
-            Logge dich mit Google ein: <br/><br/>
-            <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
+        Logge dich mit Google ein: <br /><br />
+        <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
     </div>
 
     <div id="contentHolder" style="padding:16px">

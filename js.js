@@ -1,7 +1,7 @@
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
-    document.getElementById("log").innerHTML = "Ausloggen";
+    document.getElementById("log").innerHTML = "⊝";
 
     closeAlertBox();
     getBlobber("new");
