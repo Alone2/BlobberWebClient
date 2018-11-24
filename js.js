@@ -58,9 +58,9 @@ function newBlobber() {
     var GoogleUsr = GoogleAuth.currentUser.get();
     var id_token = GoogleUsr.getAuthResponse().id_token;
 
-    $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": document.getElementById("blobInput").innerHTML }, function (data) {
+    $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": document.getElementById("blobInput").value }, function (data) {
         console.log("put Blobber:" + data);
-        document.getElementById("blobInput").innerHTML = "";
+        document.getElementById("blobInput").value = "";
     });
 
 }
