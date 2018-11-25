@@ -8,7 +8,15 @@ function onSignIn(googleUser) {
 }
 
 function init() {
-    getBlobber("new", true);
+    gapi.load('auth2', function () {
+        setTimeout(function timeout() {
+            var GoogleAuth = gapi.auth2.getAuthInstance();
+            var GoogleUsr = GoogleAuth.currentUser.get();
+            if (!GoogleUsr.isSignedIn()) {
+                getBlobber("new", true);
+            }
+        }, 300);
+    });
 }
 
 function alertBox() {
