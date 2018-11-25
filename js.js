@@ -109,7 +109,7 @@ function getBlobber(sorting, isNew = false) {
             data = JSON.parse(data);
             data.reverse();
             for (i = 0; i < data.length; i++) {
-                a = '<div id="' + data[i]["id"] + '" class="content">' + " &lt;" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+                a = '<div id="' + data[i]["id"] + '" class="content">' + "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
                 bsrc1 = "./img/upvote.svg";
                 bsrc2 = "./img/downvote.svg";
                 b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
@@ -129,7 +129,7 @@ function getBlobber(sorting, isNew = false) {
         data = JSON.parse(data);
         data.reverse();
         for (i = 0; i < data.length; i++) {
-            a = '<div id="' + data[i]["id"] + '" class="content">' + " &lt;" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+            a = '<div id="' + data[i]["id"] + '" class="content">' + "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
             bsrc1 = "./img/upvote.svg";
             bsrc2 = "./img/downvote.svg";
             if (data[i]["isUpvoted"] == true) {
