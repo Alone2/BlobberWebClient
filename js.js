@@ -101,7 +101,7 @@ function getBlobber(sorting, isNew = false) {
                 a = '<div id="' + data[i]["id"] + '" class="content">' + " &lt;" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
                 bsrc1 = "./img/upvote.svg";
                 bsrc2 = "./img/downvote.svg";
-                b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;' + data[i]["upvotes"] + '&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
+                b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
                 c = '</div>';
                 document.getElementById("blobs").innerHTML += a + b + c;
             }
@@ -127,7 +127,7 @@ function getBlobber(sorting, isNew = false) {
             if (data[i]["isDownvoted"] == true) {
                 bsrc2 = "./img/downvoted.svg";
             }
-            b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;' + data[i]["upvotes"] + '&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
+            b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
             c = '</div>';
             document.getElementById("blobs").innerHTML += a + b + c;
         }
@@ -143,22 +143,34 @@ function voteBlobber(vote, postId) {
         return;
     }
 
-    if (vote == "up") {
-        $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
+    if (vote == "up") {  
         if ($("#" + postId).find("#upvote").attr("src") == "./img/upvoted.svg") {
             $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())-1);
         } else {
             $("#" + postId).find("#upvote").attr("src", "./img/upvoted.svg");
+            //wenns downgevotet ist wirds zwei mal upgevotet
+            if ($("#" + postId).find("#downvote").attr("src") == "./img/downvoted.svg") {
+                $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())+1);
+            }
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())+1);
         }
+        $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
 
     }
     if (vote == "down") {
-        $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
         if ($("#" + postId).find("#downvote").attr("src") == "./img/downvoted.svg") {
             $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())+1);
         } else {
             $("#" + postId).find("#downvote").attr("src", "./img/downvoted.svg");
+            //wenns upgevotet ist wirs einmal downgevotet und dann noch einmal
+            if ($("#" + postId).find("#upvote").attr("src") == "./img/upvoted.svg") {
+                $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())-1);
+            }
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())-1);
         }
+        $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
     }
 
     var GoogleAuth = gapi.auth2.getAuthInstance();
