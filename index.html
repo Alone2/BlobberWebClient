@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="css.css" rel="stylesheet">
 
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script src="js.js"></script>
 
@@ -40,6 +40,9 @@
         <div id="write" class="content" style="cursor: text;" onclick='$("#blobInput").focus();'>
             <textarea maxlength="300" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
             <input type="button" onclick="newBlobber()" value="send">
+        </div>
+        <div id="blobs">
+
         </div>
     </div>
 
