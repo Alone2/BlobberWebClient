@@ -21,11 +21,22 @@ function init() {
 
 function alertBox() {
     document.getElementById("alertBox").style.display = "block";
-    document.getElementById("banner").style.opacity = "0.1";
-    document.getElementById("contentHolder").style.opacity = "0.1";
+    document.getElementById("banner").style.opacity = "0.3";
+    document.getElementById("contentHolder").style.opacity = "0.3";
+    document.getElementById("derGradient").style.opacity = "0.3";
+
 
     setTimeout(function timeout() {
-        document.getElementById("contentHolder").addEventListener("click", closeAlertBox);
+        $('body').click(function (e) {
+            console.log($(e.target));
+
+            if ($("#alertBox").find(e.target).length || $(e.target).attr('id') == "alertBox") { return }
+
+            console.log("ok");
+            closeAlertBox();
+            $('body').unbind("click");
+
+        });
     }, 100);
 }
 
@@ -41,7 +52,7 @@ function closeAlertBox() {
     document.getElementById("alertBox").style.display = "none";
     document.getElementById("banner").style.opacity = "1";
     document.getElementById("contentHolder").style.opacity = "1";
-    document.getElementById("contentHolder").removeEventListener("click", closeAlertBox);
+    document.getElementById("derGradient").style.opacity = "1";
 }
 
 window.onload = function (event) {
@@ -143,17 +154,17 @@ function voteBlobber(vote, postId) {
         return;
     }
 
-    if (vote == "up") {  
+    if (vote == "up") {
         if ($("#" + postId).find("#upvote").attr("src") == "./img/upvoted.svg") {
             $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
-            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())-1);
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) - 1);
         } else {
             $("#" + postId).find("#upvote").attr("src", "./img/upvoted.svg");
             //wenns downgevotet ist wirds zwei mal upgevotet
             if ($("#" + postId).find("#downvote").attr("src") == "./img/downvoted.svg") {
-                $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())+1);
+                $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) + 1);
             }
-            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())+1);
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) + 1);
         }
         $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
 
@@ -161,14 +172,14 @@ function voteBlobber(vote, postId) {
     if (vote == "down") {
         if ($("#" + postId).find("#downvote").attr("src") == "./img/downvoted.svg") {
             $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
-            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())+1);
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) + 1);
         } else {
             $("#" + postId).find("#downvote").attr("src", "./img/downvoted.svg");
             //wenns upgevotet ist wirs einmal downgevotet und dann noch einmal
             if ($("#" + postId).find("#upvote").attr("src") == "./img/upvoted.svg") {
-                $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())-1);
+                $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) - 1);
             }
-            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html())-1);
+            $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) - 1);
         }
         $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
     }

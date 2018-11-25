@@ -122,7 +122,8 @@ body {
 	font-size: 20px;
 	background-color: #F2F2F2;
 	width: 300px;
-	border: 1px #6E6E6E solid;
+    border: 1px #6E6E6E solid;
+    border-radius: 5px;
 	padding: 20px;
 	margin: 10% auto;
 	left: 0;
@@ -135,5 +136,6 @@ body {
     font-size: 20px;
     background-color: rgba(243, 243, 243, 0);
     outline: none;
-    overflow:auto
+    overflow:auto;
+    resize: none;
 }
