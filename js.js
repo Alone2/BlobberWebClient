@@ -19,12 +19,10 @@ function alertBox() {
 
 function logOut() {
     var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut();
-
     //auth2.disconnect();
-    setTimeout(function timeout() {
+    auth2.signOut().then(function () {
         location.reload();
-    }, 100);
+    });
 }
 
 function closeAlertBox() {
