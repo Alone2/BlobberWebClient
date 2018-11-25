@@ -7,7 +7,7 @@
 
     <meta name="viewport" content='width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0'>
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    
+
     <title id="title">Blobber</title>
     <link rel="icon" name="iconName" href="./img/icon.png" type="image/x-icon">
     <link rel="apple-touch-icon" name="iconName" sizes="57x57" href="./img/icon.png" />
@@ -38,11 +38,16 @@
 
     <div id="contentHolder" style="padding:16px">
         <div id="write" class="content" style="cursor: text;" onclick='$("#blobInput").focus();'>
-            <textarea maxlength="300" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
-            <input type="button" onclick="newBlobber()" value="send">
+            <textarea maxlength="300" style="height: 53px;" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
+            <img id="sendImg" src="img/send.svg" onclick="newBlobber()" title="senden" style="height: 42px;" class="pointerStyle">
         </div>
         <div id="blobs">
+        </div>
 
+        <div id="bottomText">
+            <br />
+            Weitere Infos auf: <a href="http://21mb.bundr.net">BundR</a>
+            <br />
         </div>
     </div>
 

@@ -47,13 +47,13 @@ function closeAlertBox() {
 window.onload = function (event) {
     document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = window.innerWidth - 75 + "px";
+    document.getElementById("blobInput").style.width = window.innerWidth - 135 + "px";
 }
 
 window.onresize = function (event) {
     document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = window.innerWidth - 75 + "px";
+    document.getElementById("blobInput").style.width = window.innerWidth - 135 + "px";
 }
 
 var blobberPath = ""
@@ -61,6 +61,16 @@ $(document).ready(function () {
     $.getJSON("files.json", function (data) {
         blobberPath = data["web"];
     });
+
+    /*
+    Für Hover
+    $("#sendImg").hover(function(){
+        console.log("yey");
+        $("#sendImg").attr("src", "./img/sendHover.svg");
+    }, function(){
+        $("#sendImg").attr("src", "./img/send.svg");
+    });*/
+
 });
 
 function newBlobber() {
