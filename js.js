@@ -89,6 +89,12 @@ function newBlobber() {
     var GoogleUsr = GoogleAuth.currentUser.get();
     var id_token = GoogleUsr.getAuthResponse().id_token;
 
+    //wenn der Nutzer nicht angemeldet ist, kann er nichts senden
+    if (!GoogleUsr.isSignedIn()) {
+        alertBox();
+        return;
+    }
+
     $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": document.getElementById("blobInput").value }, function (data) {
         console.log("put Blobber:" + data);
         document.getElementById("blobInput").value = "";
@@ -151,6 +157,7 @@ function voteBlobber(vote, postId) {
     var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist, kann er nicht upvoten
     if (!GoogleUsr.isSignedIn()) {
+        alertBox();
         return;
     }
 
