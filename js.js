@@ -1,3 +1,9 @@
+var upvoteButton = "./img/upvote-light.svg"
+var upvoteButtonPress = "./img/upvoted-light.svg"
+var downvoteButton = "./img/downvote-light.svg"
+var downvoteButtonPress = "./img/downvoted-light.svg"
+
+
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
@@ -72,6 +78,12 @@ $(document).ready(function () {
     $.getJSON("files.json", function (data) {
         blobberPath = data["web"];
     });
+    try {
+        set_cookie_theme()
+    } catch (error) {
+        console.log("No Theme selected")
+    }
+        
 
     /*
     Für Hover
@@ -116,8 +128,8 @@ function getBlobber(sorting, isNew = false) {
             data.reverse();
             for (i = 0; i < data.length; i++) {
                 a = '<div id="' + data[i]["id"] + '" class="content">' + "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
-                bsrc1 = "./img/upvote.svg";
-                bsrc2 = "./img/downvote.svg";
+                bsrc1 = upvoteButton;
+                bsrc2 = downvoteButton;
                 b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
                 c = '</div>';
                 document.getElementById("blobs").innerHTML += a + b + c;
@@ -136,13 +148,13 @@ function getBlobber(sorting, isNew = false) {
         data.reverse();
         for (i = 0; i < data.length; i++) {
             a = '<div id="' + data[i]["id"] + '" class="content">' + "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
-            bsrc1 = "./img/upvote.svg";
-            bsrc2 = "./img/downvote.svg";
+            bsrc1 = upvoteButton;
+            bsrc2 = downvoteButton;
             if (data[i]["isUpvoted"] == true) {
-                bsrc1 = "./img/upvoted.svg";
+                bsrc1 = upvoteButtonPress;
             }
             if (data[i]["isDownvoted"] == true) {
-                bsrc2 = "./img/downvoted.svg";
+                bsrc2 = downvoteButtonPress;
             }
             b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
             c = '</div>';
@@ -162,33 +174,33 @@ function voteBlobber(vote, postId) {
     }
 
     if (vote == "up") {
-        if ($("#" + postId).find("#upvote").attr("src") == "./img/upvoted.svg") {
-            $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
+        if ($("#" + postId).find("#upvote").attr("src") == upvoteButtonPress) {
+            $("#" + postId).find("#upvote").attr("src", upvoteButton);
             $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) - 1);
         } else {
-            $("#" + postId).find("#upvote").attr("src", "./img/upvoted.svg");
+            $("#" + postId).find("#upvote").attr("src", upvoteButtonPress);
             //wenns downgevotet ist wirds zwei mal upgevotet
-            if ($("#" + postId).find("#downvote").attr("src") == "./img/downvoted.svg") {
+            if ($("#" + postId).find("#downvote").attr("src") == downvoteButtonPress) {
                 $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) + 1);
             }
             $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) + 1);
         }
-        $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
+        $("#" + postId).find("#downvote").attr("src", downvoteButton);
 
     }
     if (vote == "down") {
-        if ($("#" + postId).find("#downvote").attr("src") == "./img/downvoted.svg") {
-            $("#" + postId).find("#downvote").attr("src", "./img/downvote.svg");
+        if ($("#" + postId).find("#downvote").attr("src") == downvoteButtonPress) {
+            $("#" + postId).find("#downvote").attr("src", downvoteButton);
             $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) + 1);
         } else {
-            $("#" + postId).find("#downvote").attr("src", "./img/downvoted.svg");
+            $("#" + postId).find("#downvote").attr("src", downvoteButtonPress);
             //wenns upgevotet ist wirs einmal downgevotet und dann noch einmal
-            if ($("#" + postId).find("#upvote").attr("src") == "./img/upvoted.svg") {
+            if ($("#" + postId).find("#upvote").attr("src") == upvoteButtonPress) {
                 $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) - 1);
             }
             $("#" + postId).find("upvoteNum").html(Number($("#" + postId).find("upvoteNum").html()) - 1);
         }
-        $("#" + postId).find("#upvote").attr("src", "./img/upvote.svg");
+        $("#" + postId).find("#upvote").attr("src", upvoteButton);
     }
 
     var GoogleAuth = gapi.auth2.getAuthInstance();
@@ -200,3 +212,34 @@ function voteBlobber(vote, postId) {
     });
 
 }
+
+function change_theme(theme) {
+    document.getElementsByTagName("link").item(6).href = theme + ".css";
+    var date = new Date();
+    tage = 1000 
+    date.setTime(date.getTime() + (tage*24*60*60*1000));
+    document.cookie = 'theme=' + theme + '; expires=' + date.toUTCString() + '; path=/'
+    upvoteButton = "./img/upvote-" + theme + ".svg"
+    upvoteButtonPress = "./img/upvoted-" + theme + ".svg"
+    downvoteButton = "./img/downvote-" + theme + ".svg"
+    downvoteButtonPress = "./img/downvoted-" + theme + ".svg"
+}
+
+function set_cookie_theme() {
+    cook = document.cookie;
+    split = cook.split("; ");
+    for (i = 0; i < split.length; i++) {
+        theme = split[i].split("=");
+        if (theme[0] == "theme") {
+            change_theme(theme[1]);
+            if (theme[1] == "dark") {
+                $("#theme_switcher").attr("onclick","change_theme('light'); location.reload(); ");
+            } else {
+                $("#theme_switcher").attr("onclick","change_theme('dark'),  location.reload(); ");
+            }
+            $("#theme_switcher_img").attr("src","img/"+ theme[1] + ".svg")
+            return
+        }
+    }        
+}
+    

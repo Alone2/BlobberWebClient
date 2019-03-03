@@ -1,10 +1,11 @@
 .transparentClass {
     background: rgba(255,255,255, 0.5);
 }
+
 body {
-  font-family: 'Open Sans', sans-serif;
-  background-color: #FAFAFA;
-  margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #FAFAFA;
+    margin: 0;
 }
 
 .pointerStyle {
@@ -16,32 +17,33 @@ body {
 }
 
 .banner {
-  border-width: 1px;
-  border-style: none none solid none;
-  border-color: #BFBFBF;
-  overflow: hidden;
-  background-color: #E3E3E3;
+    border-width: 1px;
+    border-style: none none solid none;
+    border-color: #BFBFBF;
+    overflow: hidden;
+    background-color: #E3E3E3;
 }
-.banner a {
-  float: left;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 30px;
 
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: pointer;
+.banner a {
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 30px;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
 }
 
 .banner titu {
-  float: left;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 30px;
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 30px;
 }
 
 .banner a:hover {
@@ -74,10 +76,10 @@ body {
 }
 
 .gradient {
-  height:10px;
-  background: linear-gradient(rgba(0, 0, 0, 0.1) -100%, rgba(255, 255, 255, 0) 100%);
-  position: fixed;
-  z-index: 1;
+    height:10px;
+    background: linear-gradient(rgba(0, 0, 0, 0.1) -100%, rgba(255, 255, 255, 0) 100%);
+    position: fixed;
+    z-index: 1;
 }
 
 #bottomText {
@@ -138,4 +140,9 @@ body {
     outline: none;
     overflow:auto;
     resize: none;
+}
+
+#theme_switcher {
+    padding: 18px 14px 10px;
+    float: right;
 }
