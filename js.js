@@ -1,7 +1,7 @@
-var upvoteButton = "./img/upvote-light.svg"
-var upvoteButtonPress = "./img/upvoted-light.svg"
-var downvoteButton = "./img/downvote-light.svg"
-var downvoteButtonPress = "./img/downvoted-light.svg"
+var upvoteButton = "./img/light/upvote.svg"
+var upvoteButtonPress = "./img/light/upvoted.svg"
+var downvoteButton = "./img/light/downvote.svg"
+var downvoteButtonPress = "./img/light/downvoted.svg"
 
 
 function onSignIn(googleUser) {
@@ -219,10 +219,10 @@ function change_theme(theme) {
     tage = 1000 
     date.setTime(date.getTime() + (tage*24*60*60*1000));
     document.cookie = 'theme=' + theme + '; expires=' + date.toUTCString() + '; path=/'
-    upvoteButton = "./img/upvote-" + theme + ".svg"
-    upvoteButtonPress = "./img/upvoted-" + theme + ".svg"
-    downvoteButton = "./img/downvote-" + theme + ".svg"
-    downvoteButtonPress = "./img/downvoted-" + theme + ".svg"
+    upvoteButton = "./img/" + theme + "/upvote.svg"
+    upvoteButtonPress = "./img/" + theme + "/upvoted.svg"
+    downvoteButton = "./img/" + theme + "/downvote.svg"
+    downvoteButtonPress = "./img/" + theme + "/downvoted.svg"
 }
 
 function set_cookie_theme() {
@@ -237,7 +237,7 @@ function set_cookie_theme() {
             } else {
                 $("#theme_switcher").attr("onclick","change_theme('dark'),  location.reload(); ");
             }
-            $("#theme_switcher_img").attr("src","img/"+ theme[1] + ".svg")
+            $("#theme_switcher_img").attr("src","img/"+ theme[1] + "/change_theme.svg")
             return
         }
     }        
