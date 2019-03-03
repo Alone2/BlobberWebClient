@@ -6,7 +6,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     background-color: rgb(5, 5, 5);
     margin: 0;
-    color: white;
+    color: rgb(215, 218, 220);
 }
 
 .pointerStyle {
@@ -45,6 +45,7 @@ body {
     padding: 14px 16px;
     text-decoration: none;
     font-size: 30px;
+    color: rgb(240, 243, 245)
 }
 
 .banner a:hover {
@@ -141,7 +142,7 @@ body {
     outline: none;
     overflow:auto;
     resize: none;
-    color: white;
+    color: rgb(240, 243, 245);
 }
 
 #theme_switcher {
