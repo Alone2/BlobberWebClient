@@ -143,6 +143,12 @@ body {
     overflow:auto;
     resize: none;
     color: rgb(240, 243, 245);
+    padding: 0px;
+}
+
+#sendImg {
+    float: right;
+    padding: 3px 0px 2px;
 }
 
 #theme_switcher {

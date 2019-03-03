@@ -64,13 +64,13 @@ function closeAlertBox() {
 window.onload = function (event) {
     document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = window.innerWidth - 135 + "px";
+    document.getElementById("blobInput").style.width = window.innerWidth - 140 + "px";
 }
 
 window.onresize = function (event) {
     document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = window.innerWidth - 135 + "px";
+    document.getElementById("blobInput").style.width = window.innerWidth - 140 + "px";
 }
 
 var blobberPath = ""

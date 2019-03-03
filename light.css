@@ -140,6 +140,12 @@ body {
     outline: none;
     overflow:auto;
     resize: none;
+    padding: 0px;
+}
+
+#sendImg {
+    float: right;
+    padding: 3px 0px 2px;
 }
 
 #theme_switcher {
