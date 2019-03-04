@@ -16,7 +16,7 @@
     <link rel="apple-touch-icon" name="iconName" sizes="144x144" href="./img/icon.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="light.css" rel="stylesheet">
+    <link href="css/light.css" rel="stylesheet">
 
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
@@ -38,7 +38,7 @@
         <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
     </div>
 
-    <div id="contentHolder" style="padding:16px">
+    <div id="contentHolder">
         <div id="write" class="content" style="cursor: text;" onclick='$("#blobInput").focus();'>
             <textarea maxlength="300" style="height: 55px;" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
             <img id="sendImg" src="img/send.svg" onclick="newBlobber()" title="senden" style="height: 50px;" class="pointerStyle">

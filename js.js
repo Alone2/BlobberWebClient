@@ -2,25 +2,29 @@ var upvoteButton = "./img/light/upvote.svg"
 var upvoteButtonPress = "./img/light/upvoted.svg"
 var downvoteButton = "./img/light/downvote.svg"
 var downvoteButtonPress = "./img/light/downvoted.svg"
+var isMobile = false;
+var isSignedIn = false;
 
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
     document.getElementById("log").innerHTML = '<img height="40px" src="img/signOut.svg">';
-
+    
     closeAlertBox();
+    isSignedIn = true;
     getBlobber("new", true);
+    console.log("2")
 }
 
 function init() {
     gapi.load('auth2', function () {
-        setTimeout(function timeout() {
+        /*setTimeout(function timeout() {
             var GoogleAuth = gapi.auth2.getAuthInstance();
             var GoogleUsr = GoogleAuth.currentUser.get();
             if (!GoogleUsr.isSignedIn()) {
                 getBlobber("new", true);
             }
-        }, 300);
+        }, 300);*/
     });
 }
 
@@ -69,13 +73,21 @@ function closeAlertBox() {
 }
 
 window.onload = function (event) {
-    document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+    if (isMobile) {
+        document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
+    } else {
+        document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+    }
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
     document.getElementById("blobInput").style.width = window.innerWidth - 140 + "px";
 }
 
 window.onresize = function (event) {
-    document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+    if (isMobile) {
+        document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
+    } else {
+        document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+    }
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
     document.getElementById("blobInput").style.width = window.innerWidth - 140 + "px";
 }
@@ -85,12 +97,11 @@ $(document).ready(function () {
     $.getJSON("files.json", function (data) {
         blobberPath = data["web"];
     });
-    try {
-        set_cookie_theme()
-    } catch (error) {
-        console.log("No Theme selected")
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+        isMobile = true;
     }
-        
+    set_cookie_theme()
+    getBlobber("new", true);
 
     /*
     Für Hover
@@ -123,10 +134,10 @@ function newBlobber() {
 }
 
 function getBlobber(sorting, isNew = false) {
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
+    //var GoogleAuth = gapi.auth2.getAuthInstance();
+    //var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist.
-    if (!GoogleUsr.isSignedIn()) {
+    if (!isSignedIn) {
         $.get(blobberPath + "getText.py", { "sorting": sorting, "von": 0, "bis": 100 }, function (data) {
             //console.log(data);
             if (isNew == true) {
@@ -144,7 +155,10 @@ function getBlobber(sorting, isNew = false) {
             }
             return;
         });
+        return;
     }
+    var GoogleAuth = gapi.auth2.getAuthInstance();
+    var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer eingeloggt ist.
     var id_token = GoogleUsr.getAuthResponse().id_token;
     $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": 0, "bis": 100 }, function (data) {
@@ -222,7 +236,12 @@ function voteBlobber(vote, postId) {
 }
 
 function change_theme(theme) {
-    document.getElementsByTagName("link").item(6).href = theme + ".css";
+    if (isMobile) {
+        document.getElementsByTagName("link").item(6).href = "css/" + theme + "M.css";
+    } else {
+        document.getElementsByTagName("link").item(6).href = "css/" + theme + ".css";
+    }
+    
     var date = new Date();
     tage = 1000 
     date.setTime(date.getTime() + (tage*24*60*60*1000));
@@ -231,11 +250,17 @@ function change_theme(theme) {
     upvoteButtonPress = "./img/" + theme + "/upvoted.svg"
     downvoteButton = "./img/" + theme + "/downvote.svg"
     downvoteButtonPress = "./img/" + theme + "/downvoted.svg"
+    $("#sendImg").attr("src", "./img/" + theme + "/send.svg")
 }
 
 function set_cookie_theme() {
     cook = document.cookie;
-    split = cook.split("; ");
+    try {
+        split = cook.split("; ");
+    } catch (error) {
+        change_theme("light");
+        return
+    }
     for (i = 0; i < split.length; i++) {
         theme = split[i].split("=");
         if (theme[0] == "theme") {
@@ -248,6 +273,7 @@ function set_cookie_theme() {
             $("#theme_switcher_img").attr("src","img/"+ theme[1] + "/change_theme.svg")
             return
         }
-    }        
+    }
+    change_theme("light");      
 }
     

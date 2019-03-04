@@ -112,6 +112,7 @@ body {
 
 #contentHolder {
     overflow: auto;
+    padding:16px
 }
 
 .nodisplay {
