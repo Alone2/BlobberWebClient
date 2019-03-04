@@ -114,6 +114,12 @@ body {
     overflow: auto;
 }
 
+.nodisplay {
+    position: fixed;
+	display: none;
+	z-index: 2;
+}
+
 #alertBox {
     position: fixed;
 	display: none;

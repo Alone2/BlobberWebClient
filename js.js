@@ -3,7 +3,6 @@ var upvoteButtonPress = "./img/light/upvoted.svg"
 var downvoteButton = "./img/light/downvote.svg"
 var downvoteButtonPress = "./img/light/downvoted.svg"
 
-
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
@@ -31,7 +30,6 @@ function alertBox() {
     document.getElementById("contentHolder").style.opacity = "0.3";
     document.getElementById("derGradient").style.opacity = "0.3";
 
-
     setTimeout(function timeout() {
         $('body').click(function (e) {
             console.log($(e.target));
@@ -44,6 +42,15 @@ function alertBox() {
 
         });
     }, 100);
+}
+
+function textAlertBoxDelay(text, delay) {
+    document.getElementById("alertBox").style.display = "block";
+    $("#alertBox").html(text+"<br />")
+
+    setTimeout(function timeout() {
+        closeAlertBox();
+    }, delay);
 }
 
 function logOut() {
@@ -109,6 +116,7 @@ function newBlobber() {
 
     $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": document.getElementById("blobInput").value }, function (data) {
         console.log("put Blobber:" + data);
+        textAlertBoxDelay("gesendet", 3000);
         document.getElementById("blobInput").value = "";
     });
 
