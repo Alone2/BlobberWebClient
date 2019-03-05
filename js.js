@@ -4,6 +4,7 @@ var downvoteButton = "./img/light/downvote.svg"
 var downvoteButtonPress = "./img/light/downvoted.svg"
 var isMobile = false;
 var isSignedIn = false;
+var isWindowsApp = false;
 
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
@@ -100,9 +101,29 @@ $(document).ready(function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         isMobile = true;
     }
-    set_cookie_theme()
+    var mode = "light";
+    if (window.Windows) {
+        isMobile = true;
+        isWindowsApp = true;
+        var uiSettings = new Windows.UI.ViewManagement.UISettings();
+        var color = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);
+        if (color["b"] != 255) {
+            mode = "dark";
+        }
+        /*var appView = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
+        var theBar = appView.titleBar;
+        theBar.backgroundColor = Windows.UI.Colors.aliceBlue;
+
+        theBar.backgroundColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);*/
+    }
+    set_cookie_theme(mode)
     getBlobber("new", true);
 
+    if (isWindowsApp) {
+        //$("#sendImg").attr("padding-right", "10px");
+        $("#numbers a").css({"padding-right":"10px"});
+        $("#contentHolder").attr("overflow","hidden");
+    }
     /*
     Für Hover
     $("#sendImg").hover(function(){
@@ -111,7 +132,6 @@ $(document).ready(function () {
     }, function(){
         $("#sendImg").attr("src", "./img/send.svg");
     });*/
-
 });
 
 function newBlobber() {
@@ -235,7 +255,7 @@ function voteBlobber(vote, postId) {
 
 }
 
-function change_theme(theme) {
+function change_theme(theme, setcookie = true) {
     if (isMobile) {
         document.getElementsByTagName("link").item(6).href = "css/" + theme + "M.css";
     } else {
@@ -243,9 +263,11 @@ function change_theme(theme) {
     }
     
     var date = new Date();
-    tage = 1000 
+    tage = 365 
     date.setTime(date.getTime() + (tage*24*60*60*1000));
-    document.cookie = 'theme=' + theme + '; expires=' + date.toUTCString() + '; path=/'
+    if (setcookie) {
+        document.cookie = 'theme=' + theme + '; expires=' + date.toUTCString() + '; path=/'
+    }
     upvoteButton = "./img/" + theme + "/upvote.svg"
     upvoteButtonPress = "./img/" + theme + "/upvoted.svg"
     downvoteButton = "./img/" + theme + "/downvote.svg"
@@ -253,27 +275,30 @@ function change_theme(theme) {
     $("#sendImg").attr("src", "./img/" + theme + "/send.svg")
 }
 
-function set_cookie_theme() {
+function set_cookie_theme(defaultMode) {
     cook = document.cookie;
     try {
         split = cook.split("; ");
     } catch (error) {
-        change_theme("light");
-        return
+        split = "theme=" + defaultMode + ";"
     }
     for (i = 0; i < split.length; i++) {
         theme = split[i].split("=");
         if (theme[0] == "theme") {
             change_theme(theme[1]);
-            if (theme[1] == "dark") {
-                $("#theme_switcher").attr("onclick","change_theme('light'); location.reload(); ");
-            } else {
-                $("#theme_switcher").attr("onclick","change_theme('dark'),  location.reload(); ");
-            }
-            $("#theme_switcher_img").attr("src","img/"+ theme[1] + "/change_theme.svg")
+            changeButtonsTheme(theme[1]);
             return
         }
     }
-    change_theme("light");      
+    change_theme(defaultMode, false);
+    changeButtonsTheme(defaultMode);
 }
-    
+
+function changeButtonsTheme(theme) {
+    if (theme == "dark") {
+        $("#theme_switcher").attr("onclick","change_theme('light'); location.reload(); ");
+    } else {
+        $("#theme_switcher").attr("onclick","change_theme('dark'),  location.reload(); ");
+    }
+    $("#theme_switcher_img").attr("src","img/"+ theme + "/change_theme.svg")
+}
