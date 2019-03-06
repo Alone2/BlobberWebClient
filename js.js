@@ -14,7 +14,7 @@ function onSignIn(googleUser) {
     closeAlertBox();
     isSignedIn = true;
     getBlobber("new", true);
-    console.log("2")
+    getOwnUsername()
 }
 
 function init() {
@@ -29,12 +29,15 @@ function init() {
     });
 }
 
-function alertBox() {
+function alertBox(isClosable = true) {
     document.getElementById("alertBox").style.display = "block";
     document.getElementById("banner").style.opacity = "0.3";
     document.getElementById("contentHolder").style.opacity = "0.3";
     document.getElementById("derGradient").style.opacity = "0.3";
 
+    if (!isClosable) {
+        return
+    }
     setTimeout(function timeout() {
         $('body').click(function (e) {
             console.log($(e.target));
@@ -253,6 +256,29 @@ function voteBlobber(vote, postId) {
         console.log(data)
     });
 
+}
+
+function getOwnUsername() {
+    var GoogleAuth = gapi.auth2.getAuthInstance();
+    var GoogleUsr = GoogleAuth.currentUser.get();
+    var id_token = GoogleUsr.getAuthResponse().id_token;
+    $.getJSON(blobberPath + "getUserDat.py", { "idTkn": id_token, "data":"name" }, function (data) {
+        console.log(data);
+        if (data["data"] == "unnamed") {
+            text = "Setze deinen Nutzernamen:<br/><input type='text' id='username'> <input type='button' value='ok' onclick='changeName($(\"#username\").val()); closeAlertBox();'/>";
+            $("#alertBox").html(text+"<br />");
+            alertBox(false);
+        }
+    });
+}
+
+function changeName(name) {
+    var GoogleAuth = gapi.auth2.getAuthInstance();
+    var GoogleUsr = GoogleAuth.currentUser.get();
+    var id_token = GoogleUsr.getAuthResponse().id_token;
+    $.get(blobberPath + "saveUserDat.py", { "idTkn": id_token, "data":"name", "dataValue":name}, function (data) {
+        console.log(data)
+    });
 }
 
 function change_theme(theme, setcookie = true) {
