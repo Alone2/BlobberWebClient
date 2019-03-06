@@ -158,3 +158,9 @@ body {
     padding: 18px 14px 10px;
     float: right;
 }
+
+input {
+    background-color: rgb(240, 240, 240);
+    border: 1px #6E6E6E solid;
+    border-radius: 3px;
+}
