@@ -13,8 +13,8 @@ function onSignIn(googleUser) {
     
     closeAlertBox();
     isSignedIn = true;
-    getBlobber("new", true);
     getOwnUsername()
+    getBlobber("new", true);
 }
 
 function init() {
