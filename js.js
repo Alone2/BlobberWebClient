@@ -138,6 +138,12 @@ $(document).ready(function () {
 });
 
 function newBlobber() {
+    if (value == "") {
+        return;
+    }
+    value = document.getElementById("blobInput").value;
+    document.getElementById("blobInput").value = "";
+
     var GoogleAuth = gapi.auth2.getAuthInstance();
     var GoogleUsr = GoogleAuth.currentUser.get();
     var id_token = GoogleUsr.getAuthResponse().id_token;
@@ -148,10 +154,9 @@ function newBlobber() {
         return;
     }
 
-    $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": document.getElementById("blobInput").value }, function (data) {
+    $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": value }, function (data) {
         console.log("put Blobber:" + data);
-        textAlertBoxDelay("gesendet", 3000);
-        document.getElementById("blobInput").value = "";
+        textAlertBoxDelay("gesendet", 2000); 
     });
 
 }
