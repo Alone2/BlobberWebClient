@@ -138,10 +138,10 @@ $(document).ready(function () {
 });
 
 function newBlobber() {
+    value = document.getElementById("blobInput").value;
     if (value == "") {
         return;
     }
-    value = document.getElementById("blobInput").value;
     document.getElementById("blobInput").value = "";
 
     var GoogleAuth = gapi.auth2.getAuthInstance();
