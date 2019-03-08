@@ -2,9 +2,12 @@ var upvoteButton = "./img/light/upvote.svg"
 var upvoteButtonPress = "./img/light/upvoted.svg"
 var downvoteButton = "./img/light/downvote.svg"
 var downvoteButtonPress = "./img/light/downvoted.svg"
+
 var isMobile = false;
 var isSignedIn = false;
 var isWindowsApp = false;
+
+var currentScrollPos = 0;
 
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
@@ -127,6 +130,15 @@ $(document).ready(function () {
         $("#numbers a").css({"padding-right":"10px"});
         $("#contentHolder").attr("overflow","hidden");
     }
+
+    document.getElementById("contentHolder").onscroll = function(ev) {
+        var wind = document.getElementById("contentHolder");
+        if ((wind.clientHeight + wind.scrollTop) >= wind.scrollHeight) {
+            currentScrollPos += 100;
+            getBlobber("new", false);
+        }
+    };
+
     /*
     Für Hover
     $("#sendImg").hover(function(){
@@ -166,7 +178,7 @@ function getBlobber(sorting, isNew = false) {
     //var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist.
     if (!isSignedIn) {
-        $.get(blobberPath + "getText.py", { "sorting": sorting, "von": 0, "bis": 100 }, function (data) {
+        $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos, "bis": currentScrollPos + 99 }, function (data) {
             //console.log(data);
             if (isNew == true) {
                 document.getElementById("blobs").innerHTML = "";
@@ -189,7 +201,7 @@ function getBlobber(sorting, isNew = false) {
     var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer eingeloggt ist.
     var id_token = GoogleUsr.getAuthResponse().id_token;
-    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": 0, "bis": 100 }, function (data) {
+    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos, "bis": currentScrollPos + 99}, function (data) {
         //console.log(data); 
         if (isNew == true) {
             document.getElementById("blobs").innerHTML = "";
