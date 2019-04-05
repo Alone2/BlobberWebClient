@@ -103,7 +103,11 @@ var blobberPath = ""
 $(document).ready(function () {
     $.getJSON("files.json", function (data) {
         blobberPath = data["web"];
+        moveOn();
     });
+
+});
+function moveOn() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         isMobile = true;
     }
@@ -147,7 +151,7 @@ $(document).ready(function () {
     }, function(){
         $("#sendImg").attr("src", "./img/send.svg");
     });*/
-});
+}
 
 function newBlobber() {
     value = document.getElementById("blobInput").value;
