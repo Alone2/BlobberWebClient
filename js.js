@@ -368,7 +368,7 @@ function getNews(){
     $.getJSON("news.json", function (data) {
         for (i = 0; i < data.length; i++) {
             new_dat = data[i]
-            $("#news").html($("#news").html() + '<div class="content newscontent">' + "<small>" + new_dat["header"] + "</small> <br />" + new_dat["message"] + "<br />")
+            $("#news").html($("#news").html() + '<div class="content newscontent"><medium style="font-size:medium">' + new_dat["header"] + "</medium><br />" + new_dat["message"] + "<br />")
         }
 
     });

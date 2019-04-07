@@ -94,13 +94,12 @@ body {
 }
 
 #news {
-    font-size: 15px;
+    font-size: small;
     float: right;
     width: 34%;
 }
 
 #news small {
-    font-size: 17px;
     color: rgb(200, 200, 200);
 }
 
