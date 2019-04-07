@@ -84,9 +84,11 @@ window.onload = function (event) {
         document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
     } else {
         document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+        document.getElementById("contentHolder").style.paddingLeft = (window.innerWidth / 4)/2 + "px";
+        document.getElementById("contentHolder").style.paddingRight = (window.innerWidth / 4)/2 + "px";
     }
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = window.innerWidth - 140 + "px";
+    document.getElementById("blobInput").style.width = $("#theRealStuff").width() - 110 + "px";
 }
 
 window.onresize = function (event) {
@@ -94,9 +96,11 @@ window.onresize = function (event) {
         document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
     } else {
         document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+        document.getElementById("contentHolder").style.paddingLeft = (window.innerWidth / 4)/2 + "px";
+        document.getElementById("contentHolder").style.paddingRight = (window.innerWidth / 4)/2 + "px";
     }
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = window.innerWidth - 140 + "px";
+    document.getElementById("blobInput").style.width = $("#theRealStuff").width() - 110 + "px";
 }
 
 var blobberPath = ""
@@ -110,6 +114,8 @@ $(document).ready(function () {
 function moveOn() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         isMobile = true;
+    } else {
+        getNews();
     }
     var mode = "light";
     if (window.Windows) {
@@ -141,6 +147,13 @@ function moveOn() {
             currentScrollPos += 100;
             getBlobber("new", false);
         }
+
+        /*var bar = document.getElementById("news");
+        if ((wind.clientHeight + wind.scrollTop) >= bar.offsetHeight) {
+            $("#news").css("position", "fixed");
+        } else {
+            $("#news").css("position", "");
+        }*/
     };
 
     /*
@@ -349,3 +362,20 @@ function changeButtonsTheme(theme) {
     }
     $("#theme_switcher_img").attr("src","img/"+ theme + "/change_theme.svg")
 }
+
+function getNews(){
+    document.getElementById("news").className = "";
+    $.getJSON("news.json", function (data) {
+        for (i = 0; i < data.length; i++) {
+            new_dat = data[i]
+            $("#news").html($("#news").html() + '<div class="content newscontent">' + "<small>" + new_dat["header"] + "</small> <br />" + new_dat["message"] + "<br />")
+        }
+
+    });
+}
+
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+    // Nicht mehr im cache gespeichert
+    cache: false
+});

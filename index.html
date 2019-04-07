@@ -39,11 +39,18 @@
     </div>
 
     <div id="contentHolder">
-        <div id="write" class="content" style="cursor: text;" onclick='$("#blobInput").focus();'>
-            <textarea maxlength="300" style="height: 55px;" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
-            <img id="sendImg" src="img/send.svg" onclick="newBlobber()" title="senden" style="height: 50px;" class="pointerStyle">
+        <div id="news" class="nodisplay">
+            <div id="blobNews" class="write content" style="cursor: text;" onclick='$("#blobInput").focus();'>
+                <b>Blobber News</b>
+            </div>
         </div>
-        <div id="blobs">
+        <div id="theRealStuff">
+            <div class="content write" style="cursor: text;" onclick='$("#blobInput").focus();'>
+                <textarea maxlength="300" style="height: 55px;" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
+                <img id="sendImg" src="img/send.svg" onclick="newBlobber()" title="senden" style="height: 50px;" class="pointerStyle">
+            </div>
+            <div id="blobs">
+            </div>
         </div>
 
         <div id="bottomText">

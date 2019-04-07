@@ -22,7 +22,7 @@ body {
     border-style: none none solid none;
     border-color: rgb(20, 20, 20);
     overflow: hidden;
-    background-color: rgb(56, 56, 56);
+    background-color: rgb(31, 31, 31)
 }
 
 .banner a {
@@ -89,6 +89,21 @@ body {
     font-size: 13px
 }
 
+#theRealStuff {
+    width: 60%;
+}
+
+#news {
+    font-size: 15px;
+    float: right;
+    width: 34%;
+}
+
+#news small {
+    font-size: 17px;
+    color: rgb(200, 200, 200);
+}
+
 .content {
     padding: 15px;
     /*border-radius: 5px;*/
@@ -102,14 +117,23 @@ body {
     background-color: rgb(31, 31, 31);
 }
 
-#write {
+.write {
     border-width: 0px 0px 1px 0px;
     border-radius: 3px 3px 0px 0px;
     background-color: rgb(36, 36, 36);
 }
 
-#write:hover {
+.write:hover {
     background-color: rgb(45, 45, 45);
+}
+
+#blobNews {
+    background-color: rgb(26, 26, 26);
+    border-color: rgb(56, 56, 56);
+}
+
+#blobNews:hover {
+    background-color: rgb(31, 31, 31);
 }
 
 #contentHolder {
