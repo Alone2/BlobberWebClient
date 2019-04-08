@@ -103,6 +103,11 @@ $(document).ready(function () {
     });
 
 });
+
+document.getElementsByTagName("link").item(6).onload = function(ev) {
+    stuffToTheRightPlace();
+};
+
 function moveOn() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         isMobile = true;
@@ -124,7 +129,7 @@ function moveOn() {
 
         theBar.backgroundColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);*/
     }
-    set_cookie_theme(mode)
+    set_cookie_theme(mode);
     getBlobber("new", true);
 
     if (isWindowsApp) {
