@@ -194,7 +194,12 @@ function getBlobber(sorting, isNew = false) {
             data = JSON.parse(data);
             data.reverse();
             for (i = 0; i < data.length; i++) {
-                a = '<div id="' + data[i]["id"] + '" class="content">' + "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+                unix_timestamp = data[i]["unxTime"];
+                var date = new Date(unix_timestamp*1000);
+                var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+                var formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
+
+                a = '<div id="' + data[i]["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
                 bsrc1 = upvoteButton;
                 bsrc2 = downvoteButton;
                 b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
@@ -217,7 +222,12 @@ function getBlobber(sorting, isNew = false) {
         data = JSON.parse(data);
         data.reverse();
         for (i = 0; i < data.length; i++) {
-            a = '<div id="' + data[i]["id"] + '" class="content">' + "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+            unix_timestamp = data[i]["unxTime"];
+            var date = new Date(unix_timestamp*1000);
+            var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+            var formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
+
+            a = '<div id="' + data[i]["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
             bsrc1 = upvoteButton;
             bsrc2 = downvoteButton;
             if (data[i]["isUpvoted"] == true) {

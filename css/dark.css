@@ -192,3 +192,8 @@ input {
     border: 1px rgb(160, 160, 160) solid;
     border-radius: 3px;
 }
+
+.date {
+    float: right;
+    font-size: xx-small;
+}
