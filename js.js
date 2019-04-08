@@ -79,19 +79,11 @@ function closeAlertBox() {
     document.getElementById("derGradient").style.opacity = "1";
 }
 
-window.onload = function (event) {
-    if (isMobile) {
-        document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
-    } else {
-        document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
-        document.getElementById("contentHolder").style.paddingLeft = (window.innerWidth / 4)/2 + "px";
-        document.getElementById("contentHolder").style.paddingRight = (window.innerWidth / 4)/2 + "px";
-    }
-    document.getElementById("derGradient").style.width = window.innerWidth + "px";
-    document.getElementById("blobInput").style.width = $("#theRealStuff").width() - 110 + "px";
+window.onresize = function (event) {
+    stuffToTheRightPlace();
 }
 
-window.onresize = function (event) {
+function stuffToTheRightPlace() {
     if (isMobile) {
         document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
     } else {
@@ -141,6 +133,8 @@ function moveOn() {
         $("#contentHolder").attr("overflow","hidden");
     }
 
+    stuffToTheRightPlace();
+
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
         if ((wind.clientHeight + wind.scrollTop) >= wind.scrollHeight) {
@@ -156,14 +150,6 @@ function moveOn() {
         }*/
     };
 
-    /*
-    Für Hover
-    $("#sendImg").hover(function(){
-        console.log("yey");
-        $("#sendImg").attr("src", "./img/sendHover.svg");
-    }, function(){
-        $("#sendImg").attr("src", "./img/send.svg");
-    });*/
 }
 
 function newBlobber() {
