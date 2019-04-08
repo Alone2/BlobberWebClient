@@ -111,7 +111,7 @@ function moveOn() {
     }
     var mode = "light";
     if (window.Windows) {
-        isMobile = true;
+        //isMobile = true;
         isWindowsApp = true;
         var uiSettings = new Windows.UI.ViewManagement.UISettings();
         var color = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);
@@ -129,8 +129,8 @@ function moveOn() {
 
     if (isWindowsApp) {
         //$("#sendImg").attr("padding-right", "10px");
-        $("#numbers a").css({"padding-right":"10px"});
-        $("#contentHolder").attr("overflow","hidden");
+        //$("#numbers a").css("padding-right","10px");
+        //$("#contentHolder").css("overflow","hidden");
     }
 
     stuffToTheRightPlace();
