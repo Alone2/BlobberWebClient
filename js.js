@@ -8,7 +8,7 @@ var isSignedIn = false;
 var isWindowsApp = false;
 
 var currentScrollPos = 0;
-var scrollPosForNew = 14;
+var scrollPosForNew = 20;
 var canScroll = true;
 
 var maxBlobs = 0;
@@ -162,13 +162,21 @@ function moveOn() {
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
         //console.log((wind.clientHeight + wind.scrollTop) + " " + wind.scrollHeight)
-        if ((wind.clientHeight + wind.scrollTop) >= wind.scrollHeight - $("#contentHolder").height()/2 && canScroll) {
+        if ((wind.clientHeight + wind.scrollTop) >= wind.scrollHeight - $("#contentHolder").height() && canScroll) {
             canScroll = false;
-            currentScrollPos -= scrollPosForNew;
-            if (currentScrollPos > 0) {
-                getBlobber(current_sorting, false);
-                console.log("load new..")
+            if (currentScrollPos <= 0) {
+                return;
             }
+            newCurrentScrollPos = currentScrollPos - scrollPosForNew;
+            if (newCurrentScrollPos > 0) {
+                currentScrollPos = newCurrentScrollPos;
+                getBlobber(current_sorting, false);
+            } else {
+                scrollPosForNew = currentScrollPos;
+                getBlobber(current_sorting, false);
+                currentScrollPos = 0;
+            }
+            console.log("load new..")
         }
 
         /*var bar = document.getElementById("news");
@@ -292,9 +300,9 @@ function getBlobberHandlerFor(dat) {
     var date = new Date(unix_timestamp*1000);
     var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
     var formattedTime = ""
-    if ((heute - date) / 1000 < 60) {
+    if ((heute - date) / 1000 <= 59) {
         formattedTime = Math.round((heute - date) / 1000) + "s"
-    } else if ((heute - date) / 1000 / 60 < 60) {
+    } else if ((heute - date) / 1000 / 60 <= 59) {
         formattedTime = Math.round((heute - date) / 1000 / 60) + "m"
     } else if ((heute - date) / 1000 / 60 / 60 <= 24) {
         formattedTime = Math.round((heute - date) / 1000 / 60 / 60) + "h"
