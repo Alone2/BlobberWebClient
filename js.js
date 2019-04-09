@@ -67,7 +67,9 @@ function alertBox(isClosable = true) {
 
 function textAlertBoxDelay(text, delay) {
     document.getElementById("alertBox").style.display = "block";
-    $("#alertBox").html(text+"<br />")
+    $("#alertBoxContent").html(text+"<br />")
+    $("#alertBoxClose").addClass("nodisplay");
+    $("#alertBoxContent").css("padding-top", $("#alertBoxContent").css("padding-left"));
 
     setTimeout(function timeout() {
         closeAlertBox();
