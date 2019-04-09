@@ -108,7 +108,10 @@ $(document).ready(function () {
 
 });
 
-document.getElementsByTagName("link").item(6).onload = function(ev) {
+document.getElementsByTagName("link").item(7).onload = function(ev) {
+    stuffToTheRightPlace();
+};
+document.getElementsByTagName("link").item(8).onload = function(ev) {
     stuffToTheRightPlace();
 };
 
@@ -322,10 +325,9 @@ function changeName(name) {
 
 function change_theme(theme, setcookie = true) {
     if (isMobile) {
-        document.getElementsByTagName("link").item(6).href = "css/" + theme + "M.css";
-    } else {
-        document.getElementsByTagName("link").item(6).href = "css/" + theme + ".css";
+        document.getElementsByTagName("link").item(8).href = "css/mobile.css";
     }
+    document.getElementsByTagName("link").item(7).href = "css/" + theme + ".css";
     
     var date = new Date();
     tage = 365 
