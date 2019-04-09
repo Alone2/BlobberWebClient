@@ -34,8 +34,14 @@
     <div id="derGradient" class="gradient"></div>
 
     <div id="alertBox">
-        Logge dich mit Google ein: <br /><br />
-        <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
+        <svg id="alertBoxClose" width="25" height="25">
+            <rect x="0" y="0" width="25" height="25" style="fill:rgb(230, 81, 81);" />
+            <circle cx="12.5" cy="12.5" r="6" stroke="black" stroke-width="1" fill="None" />
+        </svg>
+        <div id="alertBoxContent">
+            Logge dich mit Google ein: <br /><br />
+            <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
+        </div>
     </div>
 
     <div id="contentHolder">

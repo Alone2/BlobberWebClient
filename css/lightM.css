@@ -130,12 +130,23 @@ body {
 	font-size: 20px;
 	background-color: #F2F2F2;
 	width: 300px;
-    border: 1px #6E6E6E solid;
+    border: 1px rgb(223, 223, 223) solid;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
     border-radius: 5px;
-	padding: 20px;
 	margin: 10% auto;
 	left: 0;
 	right: 0;	
+}
+
+#alertBoxContent {
+    padding: 30px 20px 20px 20px;
+}
+
+#alertBoxClose {
+    float: right;
+    cursor: pointer;
 }
 
 #blobInput {
@@ -161,8 +172,9 @@ body {
 
 input {
     background-color: rgb(240, 240, 240);
-    border: 1px #6E6E6E solid;
-    border-radius: 3px;
+    border: 0px rgb(223, 223, 223) solid;
+    border-bottom-width: 1px;
+    border-radius: 1px;
 }
 
 .date {

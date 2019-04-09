@@ -52,6 +52,10 @@ function alertBox(isClosable = true) {
             $('body').unbind("click");
 
         });
+        document.getElementById("alertBox").onclick = function (event) {
+            closeAlertBox();
+            $('body').unbind("click");
+        }
     }, 100);
 }
 
@@ -301,7 +305,7 @@ function getOwnUsername() {
         console.log(data);
         if (data["data"] == "unnamed") {
             text = "Setze deinen Nutzernamen:<br/><input type='text' id='username'> <input type='button' value='ok' onclick='changeName($(\"#username\").val()); closeAlertBox();'/>";
-            $("#alertBox").html(text+"<br />");
+            $("#alertBoxContent").html(text+"<br />");
             alertBox(false);
         }
     });
