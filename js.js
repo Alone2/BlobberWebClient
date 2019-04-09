@@ -41,8 +41,12 @@ function alertBox(isClosable = true) {
     document.getElementById("derGradient").style.opacity = "0.3";
 
     if (!isClosable) {
+        $("#alertBoxClose").addClass("nodisplay");
+        $("#alertBoxContent").css("padding-top", $("#alertBoxContent").css("padding-left"));
         return
     }
+    $("#alertBoxClose").removeClass("nodisplay");
+    $("#alertBoxContent").css("padding-top", "")
     setTimeout(function timeout() {
         $('body').click(function (e) {
             console.log($(e.target));
