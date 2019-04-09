@@ -8,6 +8,8 @@ var isSignedIn = false;
 var isWindowsApp = false;
 
 var currentScrollPos = 0;
+var scrollPosForNew = 14;
+var canScroll = true;
 
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
@@ -149,9 +151,14 @@ function moveOn() {
 
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
-        if ((wind.clientHeight + wind.scrollTop) >= wind.scrollHeight) {
-            currentScrollPos += 100;
-            getBlobber("new", false);
+        //console.log((wind.clientHeight + wind.scrollTop) + " " + wind.scrollHeight)
+        if ((wind.clientHeight + wind.scrollTop) >= wind.scrollHeight - $("#contentHolder").height()/2 && canScroll) {
+            canScroll = false;
+            currentScrollPos -= scrollPosForNew;
+            if (currentScrollPos > 0) {
+                getBlobber("new", false);
+                console.log("load new..")
+            }
         }
 
         /*var bar = document.getElementById("news");
@@ -192,49 +199,49 @@ function getBlobber(sorting, isNew = false) {
     //var GoogleAuth = gapi.auth2.getAuthInstance();
     //var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist.
-    if (!isSignedIn) {
-        $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos, "bis": currentScrollPos + 99 }, function (data) {
-            //console.log(data);
-            if (isNew == true) {
-                document.getElementById("blobs").innerHTML = "";
-            }
-            data = JSON.parse(data);
-            data.reverse();
-            for (i = 0; i < data.length; i++) {
-                unix_timestamp = data[i]["unxTime"];
-                var date = new Date(unix_timestamp*1000);
-                var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-                var formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
-
-                a = '<div id="' + data[i]["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
-                bsrc1 = upvoteButton;
-                bsrc2 = downvoteButton;
-                b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
-                c = '</div>';
-                document.getElementById("blobs").innerHTML += a + b + c;
-            }
-            return;
+    if (isNew) {
+        $.getJSON(blobberPath + "getText.py", {"sorting": sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
+            currentScrollPos = data["lenght"];
+            document.getElementById("blobs").innerHTML = ""; 
+            callBlobber(sorting);
         });
+        return
+    }
+    callBlobber(sorting)
+}
+
+function callBlobber(sorting) {
+    if (!isSignedIn) {
+        getBlobberSignedOut(sorting);
         return;
     }
+    getBlobberSignedIn(sorting);
+}
+
+function getBlobberSignedOut(sorting) {
+    $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos }, function (data) {
+        data = getBlobberHandler(data);
+        for (i = 0; i < data.length; i++) {
+            a = getBlobberHandlerFor(data[i]);
+            bsrc1 = upvoteButton;
+            bsrc2 = downvoteButton;
+            b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
+            c = '</div>';
+            document.getElementById("blobs").innerHTML += a + b + c;
+        }
+        canScroll = true;
+    });
+}
+
+function getBlobberSignedIn(sorting) {
     var GoogleAuth = gapi.auth2.getAuthInstance();
     var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer eingeloggt ist.
     var id_token = GoogleUsr.getAuthResponse().id_token;
-    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos, "bis": currentScrollPos + 99}, function (data) {
-        //console.log(data); 
-        if (isNew == true) {
-            document.getElementById("blobs").innerHTML = "";
-        }
-        data = JSON.parse(data);
-        data.reverse();
+    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos}, function (data) {
+        data = getBlobberHandler(data);
         for (i = 0; i < data.length; i++) {
-            unix_timestamp = data[i]["unxTime"];
-            var date = new Date(unix_timestamp*1000);
-            var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-            var formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
-
-            a = '<div id="' + data[i]["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + data[i]["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + data[i]["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+            a = getBlobberHandlerFor(data[i]);
             bsrc1 = upvoteButton;
             bsrc2 = downvoteButton;
             if (data[i]["isUpvoted"] == true) {
@@ -247,8 +254,23 @@ function getBlobber(sorting, isNew = false) {
             c = '</div>';
             document.getElementById("blobs").innerHTML += a + b + c;
         }
+        canScroll = true;
     });
+}
 
+function getBlobberHandler(data) {
+    data = JSON.parse(data);
+    data.reverse();
+    return data
+}
+
+function getBlobberHandlerFor(dat) {
+    unix_timestamp = dat["unxTime"];
+    var date = new Date(unix_timestamp*1000);
+    var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    var formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
+
+    return '<div id="' + dat["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
 }
 
 function voteBlobber(vote, postId) {
