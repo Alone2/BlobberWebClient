@@ -11,6 +11,9 @@ var currentScrollPos = 0;
 var scrollPosForNew = 14;
 var canScroll = true;
 
+var maxBlobs = 0;
+var current_sorting = "new";
+
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
@@ -19,7 +22,7 @@ function onSignIn(googleUser) {
     closeAlertBox();
     isSignedIn = true;
     getOwnUsername()
-    getBlobber("new", true);
+    getBlobber(current_sorting, true);
 }
 
 function init() {
@@ -145,7 +148,7 @@ function moveOn() {
         theBar.backgroundColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);*/
     }
     set_cookie_theme(mode);
-    getBlobber("new", true);
+    getBlobber(current_sorting, true);
 
     if (isWindowsApp) {
         //$("#sendImg").attr("padding-right", "10px");
@@ -154,6 +157,7 @@ function moveOn() {
     }
 
     stuffToTheRightPlace();
+    //searchForNew();
 
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
@@ -162,7 +166,7 @@ function moveOn() {
             canScroll = false;
             currentScrollPos -= scrollPosForNew;
             if (currentScrollPos > 0) {
-                getBlobber("new", false);
+                getBlobber(current_sorting, false);
                 console.log("load new..")
             }
         }
@@ -175,6 +179,17 @@ function moveOn() {
         }*/
     };
 
+}
+
+function searchForNew() {
+    setTimeout(function () {
+        $.getJSON(blobberPath + "getText.py", {"sorting": current_sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
+            if (maxBlobs > data["lenght"]) {
+                console.log("Tree")
+            }
+            searchForNew();
+        }); 
+    }, 10000);
 }
 
 function newBlobber() {
@@ -208,6 +223,7 @@ function getBlobber(sorting, isNew = false) {
     if (isNew) {
         $.getJSON(blobberPath + "getText.py", {"sorting": sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
             currentScrollPos = data["lenght"];
+            maxBlobs = data["lenght"];
             document.getElementById("blobs").innerHTML = ""; 
             callBlobber(sorting);
         });
