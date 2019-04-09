@@ -288,9 +288,21 @@ function getBlobberHandler(data) {
 
 function getBlobberHandlerFor(dat) {
     unix_timestamp = dat["unxTime"];
+    var heute = new Date();
     var date = new Date(unix_timestamp*1000);
     var monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-    var formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
+    var formattedTime = ""
+    if ((heute - date) / 1000 < 60) {
+        formattedTime = Math.round((heute - date) / 1000) + "s"
+    } else if ((heute - date) / 1000 / 60 < 60) {
+        formattedTime = Math.round((heute - date) / 1000 / 60) + "m"
+    } else if ((heute - date) / 1000 / 60 / 60 <= 24) {
+        formattedTime = Math.round((heute - date) / 1000 / 60 / 60) + "h"
+    } else if (date.getFullYear() == heute.getFullYear()) {
+        formattedTime = date.getDate() +  ". " + monate[date.getMonth()];
+    } else {
+        formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
+    }
 
     return '<div id="' + dat["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
 }
