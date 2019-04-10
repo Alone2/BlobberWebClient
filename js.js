@@ -97,14 +97,35 @@ function closeAlertBox() {
 window.onresize = function (event) {
     stuffToTheRightPlace();
 }
+window.onload = function (event) {
+    //stuffToTheRightPlace();
+}
 
 function stuffToTheRightPlace() {
-    if (isMobile) {
-        document.getElementById("contentHolder").style.height = window.innerHeight - 70 + "px";
+    document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+    document.getElementById("contentHolder").style.paddingLeft = (window.innerWidth- 1200)/2 + "px";
+    document.getElementById("contentHolder").style.paddingRight = (window.innerWidth- 1200)/2 + "px";
+    if ((window.innerWidth - 1200)/2 < 20) {
+        document.getElementById("news").className = "nodisplay";
+        document.getElementById("theRealStuff").style.width = "100%";
+            
+        var the_width = window.innerWidth - 500;
+        if (the_width < 0) {
+            the_width = 0;
+        }
+        if (the_width <= 16) {
+            document.getElementById("contentHolder").style.paddingTop = the_width + "px";
+            document.getElementById("contentHolder").style.paddingBottom = the_width+ "px";
+            document.getElementById("contentHolder").style.height = (window.innerHeight - the_width - $("#banner").height() - 1) + "px";
+        } else {
+            document.getElementById("contentHolder").style.paddingTop = 16 + "px";
+            document.getElementById("contentHolder").style.paddingBottom = 16+ "px";
+        }
+        document.getElementById("contentHolder").style.paddingLeft = the_width /2 + "px";
+        document.getElementById("contentHolder").style.paddingRight = the_width /2 + "px";
     } else {
-        document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
-        document.getElementById("contentHolder").style.paddingLeft = (window.innerWidth / 4)/2 + "px";
-        document.getElementById("contentHolder").style.paddingRight = (window.innerWidth / 4)/2 + "px";
+        document.getElementById("news").className = "";
+        document.getElementById("theRealStuff").style.width = "60%";
     }
     document.getElementById("derGradient").style.width = window.innerWidth + "px";
     document.getElementById("blobInput").style.width = $("#theRealStuff").width() - 110 + "px";
@@ -119,19 +140,11 @@ $(document).ready(function () {
 
 });
 
-document.getElementsByTagName("link").item(7).onload = function(ev) {
-    stuffToTheRightPlace();
-};
-document.getElementsByTagName("link").item(8).onload = function(ev) {
-    stuffToTheRightPlace();
-};
-
 function moveOn() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         isMobile = true;
-    } else {
-        getNews();
     }
+    getNews();
     var mode = "light";
     if (window.Windows) {
         //isMobile = true;
@@ -388,9 +401,6 @@ function changeName(name) {
 }
 
 function change_theme(theme, setcookie = true) {
-    if (isMobile) {
-        document.getElementsByTagName("link").item(8).href = "css/mobile.css";
-    }
     document.getElementsByTagName("link").item(7).href = "css/" + theme + ".css";
     
     var date = new Date();
