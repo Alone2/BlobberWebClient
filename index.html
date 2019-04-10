@@ -28,7 +28,7 @@
 
 <body>
     <div id="banner" class="banner">
-        <titu>Blobber <small style="font-size: 13px">alpha</small></titu>
+        <titu onclick="showBlobs(true)">Blobber <small style="font-size: 13px">alpha</small></titu>
 
         <a id="log" class="logIn" onclick="alertBox()"><img height="40px" src="img/signIn.svg"></a>
         <a id="theme_switcher" onclick="change_theme('dark');  location.reload();"><img id="theme_switcher_img" height="30px" src="img/light/change_theme.svg"></a>
@@ -53,7 +53,9 @@
             </div>
         </div>
         <div id="theRealStuff">
-            <div class="content write" style="cursor: text;" onclick='$("#blobInput").focus();'>
+            <div id="comment" class="content nodisplay">
+            </div>
+            <div id="theSender" class="content write" style="cursor: text;" onclick='$("#blobInput").focus();'>
                 <textarea maxlength="300" style="height: 55px;" id="blobInput" type="text" placeholder="Neuer Blob"></textarea>
                 <img id="sendImg" src="img/send.svg" onclick="newBlobber()" title="senden" style="height: 50px;" class="pointerStyle">
             </div>

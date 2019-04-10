@@ -13,6 +13,7 @@ var canScroll = true;
 
 var maxBlobs = 0;
 var current_sorting = "new";
+var hereAmI = window.location.href
 
 function onSignIn(googleUser) {
     document.getElementById("log").className = "logOut";
@@ -21,8 +22,8 @@ function onSignIn(googleUser) {
     
     closeAlertBox();
     isSignedIn = true;
-    getOwnUsername()
-    getBlobber(current_sorting, true);
+    getOwnUsername();
+    handleParameters(true);
 }
 
 function init() {
@@ -131,10 +132,14 @@ function stuffToTheRightPlace() {
     document.getElementById("blobInput").style.width = $("#theRealStuff").width() - 110 + "px";
 }
 
-var blobberPath = ""
+var blobberPath = "";
+var commentUrl = "";
+var userUrl = "";
 $(document).ready(function () {
     $.getJSON("files.json", function (data) {
         blobberPath = data["web"];
+        commentUrl = data["commentUrl"];
+        userUrl = data["userUrl"];
         moveOn();
     });
 
@@ -161,7 +166,7 @@ function moveOn() {
         theBar.backgroundColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);*/
     }
     set_cookie_theme(mode);
-    getBlobber(current_sorting, true);
+    handleParameters(true);
 
     if (isWindowsApp) {
         //$("#sendImg").attr("padding-right", "10px");
@@ -183,10 +188,10 @@ function moveOn() {
             newCurrentScrollPos = currentScrollPos - scrollPosForNew;
             if (newCurrentScrollPos > 0) {
                 currentScrollPos = newCurrentScrollPos;
-                getBlobber(current_sorting, false);
+                handleParameters(false);
             } else {
                 scrollPosForNew = currentScrollPos;
-                getBlobber(current_sorting, false);
+                handleParameters(false);
                 currentScrollPos = 0;
             }
             console.log("load new..")
@@ -213,7 +218,7 @@ function searchForNew() {
     }, 10000);
 }
 
-function newBlobber() {
+function newBlobber(comment = "") {
     value = document.getElementById("blobInput").value;
     if (value == "") {
         return;
@@ -230,39 +235,39 @@ function newBlobber() {
         return;
     }
 
-    $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": value }, function (data) {
+    $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": value, "comment":comment }, function (data) {
         console.log("put Blobber:" + data);
         textAlertBoxDelay("gesendet", 2000); 
     });
 
 }
 
-function getBlobber(sorting, isNew = false) {
+function getBlobber(sorting, appendTo, isNew = false, getComment="", userId="") {
     //var GoogleAuth = gapi.auth2.getAuthInstance();
     //var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist.
     if (isNew) {
-        $.getJSON(blobberPath + "getText.py", {"sorting": sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
+        $.getJSON(blobberPath + "getText.py", {"sorting": sorting, "von": 0, "bis": 0, "getLenght":"True", "comment":getComment, "userId":userId}, function (data) {
             currentScrollPos = data["lenght"];
             maxBlobs = data["lenght"];
             document.getElementById("blobs").innerHTML = ""; 
-            callBlobber(sorting);
+            callBlobber(sorting, appendTo, getComment, userId);
         });
         return
     }
-    callBlobber(sorting)
+    callBlobber(sorting, appendTo, getComment, userId)
 }
 
-function callBlobber(sorting) {
+function callBlobber(sorting, appendTo, getComment, userId) {
     if (!isSignedIn) {
-        getBlobberSignedOut(sorting);
+        getBlobberSignedOut(sorting, appendTo, getComment, userId);
         return;
     }
-    getBlobberSignedIn(sorting);
+    getBlobberSignedIn(sorting, appendTo, getComment, userId);
 }
 
-function getBlobberSignedOut(sorting) {
-    $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos }, function (data) {
+function getBlobberSignedOut(sorting, appendTo, getComment, userId) {
+    $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId":userId }, function (data) {
         data = getBlobberHandler(data);
         for (i = 0; i < data.length; i++) {
             a = getBlobberHandlerFor(data[i]);
@@ -270,18 +275,18 @@ function getBlobberSignedOut(sorting) {
             bsrc2 = downvoteButton;
             b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
             c = '</div>';
-            document.getElementById("blobs").innerHTML += a + b + c;
+            appendTo.innerHTML += a + b + c;
         }
         canScroll = true;
     });
 }
 
-function getBlobberSignedIn(sorting) {
+function getBlobberSignedIn(sorting, appendTo, getComment, userId) {
     var GoogleAuth = gapi.auth2.getAuthInstance();
     var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer eingeloggt ist.
     var id_token = GoogleUsr.getAuthResponse().id_token;
-    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos}, function (data) {
+    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId": userId}, function (data) {
         data = getBlobberHandler(data);
         for (i = 0; i < data.length; i++) {
             a = getBlobberHandlerFor(data[i]);
@@ -295,7 +300,7 @@ function getBlobberSignedIn(sorting) {
             }
             b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
             c = '</div>';
-            document.getElementById("blobs").innerHTML += a + b + c;
+            appendTo.innerHTML += a + b + c;
         }
         canScroll = true;
     });
@@ -303,6 +308,13 @@ function getBlobberSignedIn(sorting) {
 
 function getBlobberHandler(data) {
     data = JSON.parse(data);
+    if (data["comments"]) {
+        $("#comment").html(data["originalBlob"]["text"]);
+        data = data["comments"];
+        console.log("fuck")
+    }
+    if (data.lenght < 1) {return []}
+    console.log(data)
     data.reverse();
     return data
 }
@@ -325,7 +337,7 @@ function getBlobberHandlerFor(dat) {
         formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
     }
 
-    return '<div id="' + dat["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+    return '<div id="' + dat["id"] + '"  onclick="showComments(true, id)"class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
 }
 
 function voteBlobber(vote, postId) {
@@ -455,8 +467,71 @@ function getNews(){
     });
 }
 
+function showComments(cNew, id) {
+    noShowUser();
+    window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + commentUrl + id);
+    $("#comment").html($("#" + id).html());
+    $("#blobInput").attr("placeHolder", "Neuer Kommentar");
+    $("#sendImg").attr("onclick","newBlobber("+ id +")");
+    $("#comment").removeClass("nodisplay");
+    getBlobber("new", document.getElementById("blobs"), cNew, id);
+}
+function noShowComments() {
+    $("#blobInput").attr("placeHolder", "Neuer Blob");
+    $("#sendImg").attr("onclick","newBlobber()");
+}
+
+function showBlobs(cNew) {
+    $("#comment").addClass("nodisplay");
+    noShowUser();
+    noShowComments();
+    getBlobber(current_sorting, document.getElementById("blobs"), cNew);
+}
+
+function showUser(cNew, user) {
+    noShowComments();
+    $("#comment").removeClass("nodisplay");
+    window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + userUrl + id);
+    $("#comment").html("<b>Nutzer</b>");
+    $("#theSender").addClass("nodisplay");
+    getBlobber("user", document.getElementById("blobs"), cNew, "", user);
+}
+function noShowUser() {
+    $("#comment").html("");
+    $("#theSender").removeClass("nodisplay");
+}
+
 $.ajaxSetup ({
     // Disable caching of AJAX responses
     // Nicht mehr im cache gespeichert
     cache: false
 });
+
+window.onpopstate = function(event) {
+    handleParameters(true);
+}
+
+function handleParameters(cNew) {
+    comment = GetURLParameter("comment");
+    user = GetURLParameter("user");
+    if (comment) {
+        showComments(cNew, comment);
+        return;
+    } else if (user) {
+        showUser(cNew, user);
+        return;
+    }
+    showBlobs(cNew);
+}
+
+//Nächste Funktion wurde dreist kopiert von: http://www.jquerybyexample.net/2012/06/get-url-parameters-using-jquery.html
+function GetURLParameter(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        }
+    }
+}
