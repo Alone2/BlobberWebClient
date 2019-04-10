@@ -268,16 +268,7 @@ function callBlobber(sorting, appendTo, getComment, userId) {
 
 function getBlobberSignedOut(sorting, appendTo, getComment, userId) {
     $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId":userId }, function (data) {
-        data = getBlobberHandler(data);
-        for (i = 0; i < data.length; i++) {
-            a = getBlobberHandlerFor(data[i]);
-            bsrc1 = upvoteButton;
-            bsrc2 = downvoteButton;
-            b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
-            c = '</div>';
-            appendTo.innerHTML += a + b + c;
-        }
-        canScroll = true;
+        getBlobberHandler(data, appendTo);
     });
 }
 
@@ -287,39 +278,27 @@ function getBlobberSignedIn(sorting, appendTo, getComment, userId) {
     // Wenn der Nutzer eingeloggt ist.
     var id_token = GoogleUsr.getAuthResponse().id_token;
     $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId": userId}, function (data) {
-        data = getBlobberHandler(data);
-        for (i = 0; i < data.length; i++) {
-            a = getBlobberHandlerFor(data[i]);
-            bsrc1 = upvoteButton;
-            bsrc2 = downvoteButton;
-            if (data[i]["isUpvoted"] == true) {
-                bsrc1 = upvoteButtonPress;
-            }
-            if (data[i]["isDownvoted"] == true) {
-                bsrc2 = downvoteButtonPress;
-            }
-            b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + data[i]["id"] + '\')">&nbsp;<upvoteNum>' + data[i]["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + data[i]["id"] + '\')"><br>';
-            c = '</div>';
-            appendTo.innerHTML += a + b + c;
-        }
-        canScroll = true;
+        getBlobberHandler(data, appendTo);
     });
 }
 
-function getBlobberHandler(data) {
+function getBlobberHandler(data, appendTo) {
     data = JSON.parse(data);
     if (data["comments"]) {
-        $("#comment").html(data["originalBlob"]["text"]);
+        $("#comment").html(printBlobs(data["originalBlob"]));
         data = data["comments"];
-        console.log("fuck")
     }
     if (data.lenght < 1) {return []}
-    console.log(data)
+    //console.log(data)
     data.reverse();
-    return data
+
+    for (i = 0; i < data.length; i++) {
+        appendTo.innerHTML += printBlobs(data[i]); 
+    }
+    canScroll = true;
 }
 
-function getBlobberHandlerFor(dat) {
+function printBlobs(dat) {
     unix_timestamp = dat["unxTime"];
     var heute = new Date();
     var date = new Date(unix_timestamp*1000);
@@ -337,7 +316,21 @@ function getBlobberHandlerFor(dat) {
         formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
     }
 
-    return '<div id="' + dat["id"] + '"  onclick="showComments(true, id)"class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+    a = '<div id="' + dat["id"] + '" onclick="showComments(true, id)" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+
+    bsrc1 = upvoteButton;
+    bsrc2 = downvoteButton;
+    if (isSignedIn) {
+        if (data[i]["isUpvoted"] == true) {
+            bsrc1 = upvoteButtonPress;
+        }
+        if (data[i]["isDownvoted"] == true) {
+            bsrc2 = downvoteButtonPress;
+        }
+    }
+    b = '<img class="pointerStyle" id="upvote" src="' + bsrc1 + '" style="width:20px;height:20px;" onclick="voteBlobber(\'up\',\'' + dat["id"] + '\')">&nbsp;<upvoteNum>' + dat["upvotes"] + '</upvoteNum>&nbsp;<img src="' + bsrc2 + '" class="pointerStyle" id="downvote" style="width:20px;height:20px;" onclick="voteBlobber(\'down\',\'' + dat["id"] + '\')"><br>';
+    c = '</div>';
+    return a + b + c;
 }
 
 function voteBlobber(vote, postId) {
@@ -470,7 +463,9 @@ function getNews(){
 function showComments(cNew, id) {
     noShowUser();
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + commentUrl + id);
-    $("#comment").html($("#" + id).html());
+    new_html = $("#" + id).wrap('<div>').parent().html();
+    $("#comment").html(new_html);
+    $("#the_list_item").unwrap();
     $("#blobInput").attr("placeHolder", "Neuer Kommentar");
     $("#sendImg").attr("onclick","newBlobber("+ id +")");
     $("#comment").removeClass("nodisplay");
@@ -485,14 +480,15 @@ function showBlobs(cNew) {
     $("#comment").addClass("nodisplay");
     noShowUser();
     noShowComments();
+    window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname);
     getBlobber(current_sorting, document.getElementById("blobs"), cNew);
 }
 
 function showUser(cNew, user) {
     noShowComments();
     $("#comment").removeClass("nodisplay");
-    window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + userUrl + id);
-    $("#comment").html("<b>Nutzer</b>");
+    window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + userUrl + user);
+    $("#comment").html("<div class='content'><b>Nutzer</b></div>");
     $("#theSender").addClass("nodisplay");
     getBlobber("user", document.getElementById("blobs"), cNew, "", user);
 }
