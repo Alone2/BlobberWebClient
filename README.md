@@ -3,6 +3,6 @@ Blobber is a new, trendy social media network
 
 Tools used:
 
-- jQuery: https://jquery.com/
+- JSO: https://github.com/andreassolberg/jso
 
-- Google Sign-In: https://developers.google.com/identity/sign-in/web/
+- jQuery: https://jquery.com/
