@@ -187,3 +187,7 @@ input {
     float: right;
     font-size: xx-small;
 }
+
+#blobs {
+    cursor: pointer;
+}
