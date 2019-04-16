@@ -15,7 +15,35 @@ var maxBlobs = 0;
 var current_sorting = "new";
 var hereAmI = window.location.href
 
-function onSignIn(googleUser) {
+
+//
+// SIGN IN STUFF
+let client = new jso.JSO({
+    providerID: "google",
+    client_id: "275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com",
+    authorization: "https://accounts.google.com/o/oauth2/auth",
+    redirect_uri: location.protocol + '//' + location.host + location.pathname + "popUp.html",
+    scopes: { 
+        request: ["https://www.googleapis.com/auth/userinfo.profile"]
+    },
+    request: {
+		prompt: "select_account"
+	}
+});
+client.callback();
+
+function authorizePopup() {
+    client.setLoader(jso.Popup)
+    client.getToken({})
+		.then((token) => {
+            onSignIn();
+		})
+		.catch((err) => {
+			console.error("Error from passive loader", err)
+    })
+}
+
+function onSignIn() {
     document.getElementById("log").className = "logOut";
     document.getElementById("log").setAttribute("onclick", "logOut();");
     document.getElementById("log").innerHTML = '<img height="40px" src="img/signOut.svg">';
@@ -24,19 +52,49 @@ function onSignIn(googleUser) {
     isSignedIn = true;
     getOwnUsername();
     handleParameters(true);
+    setSignedInState(true);
+    console.log("signed in")
 }
 
-function init() {
-    gapi.load('auth2', function () {
-        /*setTimeout(function timeout() {
-            var GoogleAuth = gapi.auth2.getAuthInstance();
-            var GoogleUsr = GoogleAuth.currentUser.get();
-            if (!GoogleUsr.isSignedIn()) {
-                getBlobber("new", true);
-            }
-        }, 300);*/
-    });
+function getToken() {
+    var token = client.getToken({})["_v"]["id_token"]
+    return token
 }
+
+function logOut() {
+    setSignedInState(false);
+    client.wipeTokens();
+    location.reload();
+
+}
+function setSignedInState(signedIn) {
+    var date = new Date();
+    tage = 365 
+    date.setTime(date.getTime() + (tage*24*60*60*1000));
+    document.cookie = 'isSignedIn='+ signedIn +'; expires=' + date.toUTCString() + '; path=/';
+}
+
+function getSignedInState() {
+    cook = document.cookie;
+    try {
+        split = cook.split("; ");
+    } catch (error) {
+        console.log("Error: No Cookies D=")
+    }
+    for (i = 0; i < split.length; i++) {
+        parameter = split[i].split("=");
+        if (parameter[0] == "isSignedIn") {
+            if (parameter[1] == "true") {
+                console.log(parameter)
+                onSignIn();
+            } 
+            return
+        }
+    }
+}
+// SIGN IN STUFF END
+//
+
 
 function alertBox(isClosable = true) {
     document.getElementById("alertBox").style.display = "block";
@@ -78,14 +136,6 @@ function textAlertBoxDelay(text, delay) {
     setTimeout(function timeout() {
         closeAlertBox();
     }, delay);
-}
-
-function logOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    //auth2.disconnect();
-    auth2.signOut().then(function () {
-        location.reload();
-    });
 }
 
 function closeAlertBox() {
@@ -177,6 +227,8 @@ function moveOn() {
     stuffToTheRightPlace();
     //searchForNew();
 
+    getSignedInState();
+
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
         //console.log((wind.clientHeight + wind.scrollTop) + " " + wind.scrollHeight)
@@ -225,13 +277,11 @@ function newBlobber(comment = "") {
     }
     document.getElementById("blobInput").value = "";
 
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
-    var id_token = GoogleUsr.getAuthResponse().id_token;
+    var id_token = getToken();
 
     //wenn der Nutzer nicht angemeldet ist, kann er nichts senden
-    if (!GoogleUsr.isSignedIn()) {
-        alertBox();
+    if (id_token == null) {
+        authorizePopup();
         return;
     }
 
@@ -243,8 +293,6 @@ function newBlobber(comment = "") {
 }
 
 function getBlobber(sorting, appendTo, isNew = false, getComment="", userId="") {
-    //var GoogleAuth = gapi.auth2.getAuthInstance();
-    //var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist.
     if (isNew) {
         $.getJSON(blobberPath + "getText.py", {"sorting": sorting, "von": 0, "bis": 0, "getLenght":"True", "comment":getComment, "userId":userId}, function (data) {
@@ -273,10 +321,8 @@ function getBlobberSignedOut(sorting, appendTo, getComment, userId) {
 }
 
 function getBlobberSignedIn(sorting, appendTo, getComment, userId) {
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer eingeloggt ist.
-    var id_token = GoogleUsr.getAuthResponse().id_token;
+    var id_token = getToken();
     $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId": userId}, function (data) {
         getBlobberHandler(data, appendTo);
     });
@@ -321,10 +367,10 @@ function printBlobs(dat) {
     bsrc1 = upvoteButton;
     bsrc2 = downvoteButton;
     if (isSignedIn) {
-        if (data[i]["isUpvoted"] == true) {
+        if (dat["isUpvoted"] == true) {
             bsrc1 = upvoteButtonPress;
         }
-        if (data[i]["isDownvoted"] == true) {
+        if (dat["isDownvoted"] == true) {
             bsrc2 = downvoteButtonPress;
         }
     }
@@ -334,11 +380,9 @@ function printBlobs(dat) {
 }
 
 function voteBlobber(vote, postId) {
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
     // Wenn der Nutzer nicht eingeloggt ist, kann er nicht upvoten
-    if (!GoogleUsr.isSignedIn()) {
-        alertBox();
+    if (getToken() == null) {
+        authorizePopup();
         return;
     }
 
@@ -372,9 +416,7 @@ function voteBlobber(vote, postId) {
         $("#" + postId).find("#upvote").attr("src", upvoteButton);
     }
 
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
-    var id_token = GoogleUsr.getAuthResponse().id_token;
+    var id_token = getToken();
 
     $.get(blobberPath + "vote.py", { "idTkn": id_token, "postId": postId, "vote": vote }, function (data) {
         console.log(data)
@@ -383,9 +425,7 @@ function voteBlobber(vote, postId) {
 }
 
 function getOwnUsername() {
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
-    var id_token = GoogleUsr.getAuthResponse().id_token;
+    var id_token = getToken();
     $.getJSON(blobberPath + "getUserDat.py", { "idTkn": id_token, "data":"name" }, function (data) {
         console.log(data);
         if (data["data"] == "unnamed") {
@@ -397,9 +437,7 @@ function getOwnUsername() {
 }
 
 function changeName(name) {
-    var GoogleAuth = gapi.auth2.getAuthInstance();
-    var GoogleUsr = GoogleAuth.currentUser.get();
-    var id_token = GoogleUsr.getAuthResponse().id_token;
+    var id_token = getToken();
     $.get(blobberPath + "saveUserDat.py", { "idTkn": id_token, "data":"name", "dataValue":name}, function (data) {
         console.log(data)
     });
@@ -530,16 +568,4 @@ function GetURLParameter(sParam) {
             return sParameterName[1];
         }
     }
-}
-
-function doTheOauth() {
-    var client = new jso.JSO({
-        providerID: "google",
-        client_id: "275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com",
-        redirect_uri: "http://localhost/BlobberWebClient",
-        authorization: "https://accounts.google.com/o/oauth2/auth",
-        scopes: { 
-            request: ["https://www.googleapis.com/auth/userinfo.profile"]
-        }
-    });
 }

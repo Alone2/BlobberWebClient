@@ -3,7 +3,6 @@
 
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <meta name="google-signin-client_id" content="275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com">
 
     <meta name="viewport" content='width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0'>
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +30,7 @@
     <div id="banner" class="banner">
         <titu onclick="showBlobs(true)">Blobber <small style="font-size: 13px">alpha</small></titu>
 
-        <a id="log" class="logIn" onclick="alertBox()"><img height="40px" src="img/signIn.svg"></a>
+        <a id="log" class="logIn" onclick="authorizePopup()"><img height="40px" src="img/signIn.svg"></a>
         <a id="theme_switcher" onclick="change_theme('dark');  location.reload();"><img id="theme_switcher_img" height="30px" src="img/light/change_theme.svg"></a>
     </div>
     <div id="derGradient" class="gradient"></div>
@@ -71,43 +70,5 @@
     </div>
 
 </body>
-
-<script type="text/javascript">
-let client = new jso.JSO({
-    providerID: "google",
-    client_id: "275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com",
-    authorization: "https://accounts.google.com/o/oauth2/auth",
-    redirect_uri: "http://localhost/BlobberWebClient/popUp.html",
-    scopes: { 
-        request: ["https://www.googleapis.com/auth/userinfo.profile"]
-    },
-    request: {
-		prompt: "select_account"
-	}
-});
-client.callback();
-authorizePopup();
-function authorizePopup() {
-    client.setLoader(jso.Popup)
-    let opts = {
-        
-    }
-    client.getToken(opts)
-		.then((token) => {
-			console.log("I got the token: ", token["id_token"])
-		})
-		.catch((err) => {
-			console.error("Error from passive loader", err)
-    })
-}
-function getToken() {
-    let token = client.getToken(opts);
-    return token
-}
-
-function signOut() {
-    client.wipeTokens();
-}
-</script>
 
 </html>
