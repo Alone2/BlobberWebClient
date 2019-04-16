@@ -191,3 +191,9 @@ input {
 #blobs {
     cursor: pointer;
 }
+
+#cross {
+    position: fixed;
+    bottom: 500;
+    right: 500;
+}

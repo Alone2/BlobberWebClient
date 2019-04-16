@@ -507,9 +507,11 @@ function showComments(cNew, id) {
     $("#blobInput").attr("placeHolder", "Neuer Kommentar");
     $("#sendImg").attr("onclick","newBlobber("+ id +")");
     $("#comment").removeClass("nodisplay");
+    $("#cross").removeClass("nodisplay");
     getBlobber("new", document.getElementById("blobs"), cNew, id);
 }
 function noShowComments() {
+    $("#cross").addClass("nodisplay");
     $("#blobInput").attr("placeHolder", "Neuer Blob");
     $("#sendImg").attr("onclick","newBlobber()");
 }
