@@ -9,6 +9,7 @@ var isWindowsApp = false;
 
 var currentScrollPos = 0;
 var scrollPosForNew = 20;
+var homeScrollPos =0;
 var canScroll = true;
 
 var maxBlobs = 0;
@@ -229,6 +230,18 @@ function moveOn() {
 
     getSignedInState();
 
+
+    $('#contentHolder').click(function (e) {
+        console.log(e.target);
+        console.log(e.target.className);
+        if (e.target.className == "content"){
+            showComments(true, e.target.id);
+        }
+        if (e.target.className == "name") {
+            showUser(true, e.target.id, e.target.innerHTML);
+        }
+    });
+
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
         //console.log((wind.clientHeight + wind.scrollTop) + " " + wind.scrollHeight)
@@ -362,7 +375,7 @@ function printBlobs(dat) {
         formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
     }
 
-    a = '<div id="' + dat["id"] + '" onclick="showComments(true, id)" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+    a = '<div id="' + dat["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small><b id='" + dat["OP_id"] + "' class='name'>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
 
     bsrc1 = upvoteButton;
     bsrc2 = downvoteButton;
@@ -500,13 +513,13 @@ function getNews(){
 
 function showComments(cNew, id) {
     noShowUser();
+    noShowBlobs() 
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + commentUrl + id);
     new_html = $("#" + id).wrap('<div>').parent().html();
     $("#comment").html(new_html);
     $("#the_list_item").unwrap();
     $("#blobInput").attr("placeHolder", "Neuer Kommentar");
     $("#sendImg").attr("onclick","newBlobber("+ id +")");
-    $("#comment").removeClass("nodisplay");
     $("#cross").removeClass("nodisplay");
     getBlobber("new", document.getElementById("blobs"), cNew, id);
 }
@@ -523,12 +536,15 @@ function showBlobs(cNew) {
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname);
     getBlobber(current_sorting, document.getElementById("blobs"), cNew);
 }
-
-function showUser(cNew, user) {
-    noShowComments();
+function noShowBlobs() {
     $("#comment").removeClass("nodisplay");
+}
+
+function showUser(cNew, user, name) {
+    noShowComments();
+    noShowBlobs();
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + userUrl + user);
-    $("#comment").html("<div class='content'><b>Nutzer</b></div>");
+    $("#comment").html("<div class='content'><b>"+name+"</b></div>");
     $("#theSender").addClass("nodisplay");
     getBlobber("user", document.getElementById("blobs"), cNew, "", user);
 }
@@ -554,7 +570,7 @@ function handleParameters(cNew) {
         showComments(cNew, comment);
         return;
     } else if (user) {
-        showUser(cNew, user);
+        showUser(cNew, user, "Nutzer");
         return;
     }
     showBlobs(cNew);
