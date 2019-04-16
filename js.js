@@ -531,3 +531,15 @@ function GetURLParameter(sParam) {
         }
     }
 }
+
+function doTheOauth() {
+    var client = new jso.JSO({
+        providerID: "google",
+        client_id: "275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com",
+        redirect_uri: "http://localhost/BlobberWebClient",
+        authorization: "https://accounts.google.com/o/oauth2/auth",
+        scopes: { 
+            request: ["https://www.googleapis.com/auth/userinfo.profile"]
+        }
+    });
+}

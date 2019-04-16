@@ -20,8 +20,9 @@
     <link href="css/light.css" rel="stylesheet">
     <link href="" rel="stylesheet">
 
-    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/jso/dist/jso.js"></script>
+
     <script src="js.js"></script>
 
 </head>
@@ -42,7 +43,6 @@
         </svg>
         <div id="alertBoxContent">
             Logge dich mit Google ein: <br /><br />
-            <div class="g-signin2" style="width:125px; margin:0 auto;" data-onsuccess="onSignIn" data-prompt="select_account"></div>
         </div>
     </div>
 
@@ -71,5 +71,43 @@
     </div>
 
 </body>
+
+<script type="text/javascript">
+let client = new jso.JSO({
+    providerID: "google",
+    client_id: "275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com",
+    authorization: "https://accounts.google.com/o/oauth2/auth",
+    redirect_uri: "http://localhost/BlobberWebClient/popUp.html",
+    scopes: { 
+        request: ["https://www.googleapis.com/auth/userinfo.profile"]
+    },
+    request: {
+		prompt: "select_account"
+	}
+});
+client.callback();
+authorizePopup();
+function authorizePopup() {
+    client.setLoader(jso.Popup)
+    let opts = {
+        
+    }
+    client.getToken(opts)
+		.then((token) => {
+			console.log("I got the token: ", token["id_token"])
+		})
+		.catch((err) => {
+			console.error("Error from passive loader", err)
+    })
+}
+function getToken() {
+    let token = client.getToken(opts);
+    return token
+}
+
+function signOut() {
+    client.wipeTokens();
+}
+</script>
 
 </html>
