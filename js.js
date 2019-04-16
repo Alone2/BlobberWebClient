@@ -280,7 +280,7 @@ function newBlobber(comment = "") {
     var id_token = getToken();
 
     //wenn der Nutzer nicht angemeldet ist, kann er nichts senden
-    if (id_token == null) {
+    if (!isSignedIn) {
         authorizePopup();
         return;
     }
@@ -381,7 +381,7 @@ function printBlobs(dat) {
 
 function voteBlobber(vote, postId) {
     // Wenn der Nutzer nicht eingeloggt ist, kann er nicht upvoten
-    if (getToken() == null) {
+    if (!isSignedIn) {
         authorizePopup();
         return;
     }
