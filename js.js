@@ -34,8 +34,15 @@ let client = new jso.JSO({
 client.callback();
 
 function authorizePopup() {
-    client.setLoader(jso.Popup)
-    client.getToken({})
+    opt = {};
+    if (!isWindowsApp) {
+        client.setLoader(jso.Popup);
+    } else {
+        opt = {
+            redirect_uri: location.protocol + '//' + location.host + location.pathname + "?signIn=true"
+        }
+    }
+    client.getToken(opt)
 		.then((token) => {
             onSignIn();
 		})
@@ -217,7 +224,7 @@ function moveOn() {
         theBar.backgroundColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);*/
     }
     set_cookie_theme(mode);
-    handleParameters(true);
+    handleParameters(true, true);
 
     if (isWindowsApp) {
         //$("#sendImg").attr("padding-right", "10px");
@@ -563,9 +570,14 @@ window.onpopstate = function(event) {
     handleParameters(true);
 }
 
-function handleParameters(cNew) {
+function handleParameters(cNew, withSignedIn=false) {
     comment = GetURLParameter("comment");
     user = GetURLParameter("user");
+    signedIn = GetURLParameter("signIn") 
+    if(signedIn && withSignedIn) {
+        console.log("uff");
+        onSignIn();  
+    }
     if (comment) {
         showComments(cNew, comment);
         return;
