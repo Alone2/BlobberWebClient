@@ -118,3 +118,8 @@ input {
 
 .date {
 }
+
+div.sticky {
+    background-color: #01A9DB;
+    color: white;
+}

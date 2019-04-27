@@ -247,6 +247,10 @@ function moveOn() {
         if (e.target.className == "name") {
             showUser(true, e.target.id, e.target.innerHTML);
         }
+        if (e.target.className == "sticky") {
+            $('#newBlob').addClass("nodisplay");
+            handleParameters(true);
+        }
     });
 
     document.getElementById("contentHolder").onscroll = function(ev) {
@@ -282,8 +286,9 @@ function moveOn() {
 function searchForNew() {
     setTimeout(function () {
         $.getJSON(blobberPath + "getText.py", {"sorting": current_sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
-            if (maxBlobs > data["lenght"]) {
-                console.log("Tree")
+            if (maxBlobs < data["lenght"]) {
+                $("#newBlob").removeClass("nodisplay");
+                document.getElementById("contentHolder").scrollBy(0, $("#newBlob").outerHeight());
             }
             searchForNew();
         }); 
