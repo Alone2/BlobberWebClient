@@ -233,7 +233,7 @@ function moveOn() {
     }
 
     stuffToTheRightPlace();
-    //searchForNew();
+    searchForNew();
 
     getSignedInState();
 
