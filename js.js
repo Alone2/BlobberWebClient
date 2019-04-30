@@ -9,6 +9,7 @@ var isWindowsApp = false;
 
 var currentScrollPos = 0;
 var scrollPosForNew = 20;
+var homeScrollPos =0;
 var canScroll = true;
 
 var maxBlobs = 0;
@@ -33,8 +34,15 @@ let client = new jso.JSO({
 client.callback();
 
 function authorizePopup() {
-    client.setLoader(jso.Popup)
-    client.getToken({})
+    opt = {};
+    if (!isWindowsApp) {
+        client.setLoader(jso.Popup);
+    } else {
+        opt = {
+            redirect_uri: location.protocol + '//' + location.host + location.pathname + "?signIn=true"
+        }
+    }
+    client.getToken(opt)
 		.then((token) => {
             onSignIn();
 		})
@@ -216,7 +224,7 @@ function moveOn() {
         theBar.backgroundColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.background);*/
     }
     set_cookie_theme(mode);
-    handleParameters(true);
+    handleParameters(true, true);
 
     if (isWindowsApp) {
         //$("#sendImg").attr("padding-right", "10px");
@@ -225,9 +233,25 @@ function moveOn() {
     }
 
     stuffToTheRightPlace();
-    //searchForNew();
+    searchForNew();
 
     getSignedInState();
+
+
+    $('#contentHolder').click(function (e) {
+        console.log(e.target);
+        console.log(e.target.className);
+        if (e.target.className == "content"){
+            showComments(true, e.target.id);
+        }
+        if (e.target.className == "name") {
+            showUser(true, e.target.id, e.target.innerHTML);
+        }
+        if (e.target.className == "sticky") {
+            $('#newBlob').addClass("nodisplay");
+            handleParameters(true);
+        }
+    });
 
     document.getElementById("contentHolder").onscroll = function(ev) {
         var wind = document.getElementById("contentHolder");
@@ -262,8 +286,9 @@ function moveOn() {
 function searchForNew() {
     setTimeout(function () {
         $.getJSON(blobberPath + "getText.py", {"sorting": current_sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
-            if (maxBlobs > data["lenght"]) {
-                console.log("Tree")
+            if (maxBlobs < data["lenght"]) {
+                $("#newBlob").removeClass("nodisplay");
+                document.getElementById("contentHolder").scrollBy(0, $("#newBlob").outerHeight());
             }
             searchForNew();
         }); 
@@ -280,7 +305,7 @@ function newBlobber(comment = "") {
     var id_token = getToken();
 
     //wenn der Nutzer nicht angemeldet ist, kann er nichts senden
-    if (id_token == null) {
+    if (!isSignedIn) {
         authorizePopup();
         return;
     }
@@ -362,7 +387,7 @@ function printBlobs(dat) {
         formattedTime = date.getDate() +  ". " + monate[date.getMonth()] + " " + date.getFullYear();
     }
 
-    a = '<div id="' + dat["id"] + '" onclick="showComments(true, id)" class="content">' + "<small class='date'>" + formattedTime + "</small>" +  "<b>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
+    a = '<div id="' + dat["id"] + '" class="content">' + "<small class='date'>" + formattedTime + "</small><b id='" + dat["OP_id"] + "' class='name'>" + dat["OP"].replace(new RegExp("<", 'g'), '&lt;') + "</b> <br />" + dat["text"].replace(new RegExp("<", 'g'), '&lt;') + " <br />";
 
     bsrc1 = upvoteButton;
     bsrc2 = downvoteButton;
@@ -381,7 +406,7 @@ function printBlobs(dat) {
 
 function voteBlobber(vote, postId) {
     // Wenn der Nutzer nicht eingeloggt ist, kann er nicht upvoten
-    if (getToken() == null) {
+    if (!isSignedIn) {
         authorizePopup();
         return;
     }
@@ -500,16 +525,18 @@ function getNews(){
 
 function showComments(cNew, id) {
     noShowUser();
+    noShowBlobs() 
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + commentUrl + id);
     new_html = $("#" + id).wrap('<div>').parent().html();
     $("#comment").html(new_html);
     $("#the_list_item").unwrap();
     $("#blobInput").attr("placeHolder", "Neuer Kommentar");
     $("#sendImg").attr("onclick","newBlobber("+ id +")");
-    $("#comment").removeClass("nodisplay");
+    $("#cross").removeClass("nodisplay");
     getBlobber("new", document.getElementById("blobs"), cNew, id);
 }
 function noShowComments() {
+    $("#cross").addClass("nodisplay");
     $("#blobInput").attr("placeHolder", "Neuer Blob");
     $("#sendImg").attr("onclick","newBlobber()");
 }
@@ -521,12 +548,15 @@ function showBlobs(cNew) {
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname);
     getBlobber(current_sorting, document.getElementById("blobs"), cNew);
 }
-
-function showUser(cNew, user) {
-    noShowComments();
+function noShowBlobs() {
     $("#comment").removeClass("nodisplay");
+}
+
+function showUser(cNew, user, name) {
+    noShowComments();
+    noShowBlobs();
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + userUrl + user);
-    $("#comment").html("<div class='content'><b>Nutzer</b></div>");
+    $("#comment").html("<div class='content'><b>"+name+"</b></div>");
     $("#theSender").addClass("nodisplay");
     getBlobber("user", document.getElementById("blobs"), cNew, "", user);
 }
@@ -545,14 +575,19 @@ window.onpopstate = function(event) {
     handleParameters(true);
 }
 
-function handleParameters(cNew) {
+function handleParameters(cNew, withSignedIn=false) {
     comment = GetURLParameter("comment");
     user = GetURLParameter("user");
+    signedIn = GetURLParameter("signIn") 
+    if(signedIn && withSignedIn) {
+        console.log("uff");
+        onSignIn();  
+    }
     if (comment) {
         showComments(cNew, comment);
         return;
     } else if (user) {
-        showUser(cNew, user);
+        showUser(cNew, user, "Nutzer");
         return;
     }
     showBlobs(cNew);

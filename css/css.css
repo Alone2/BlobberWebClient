@@ -187,3 +187,33 @@ input {
     float: right;
     font-size: xx-small;
 }
+
+#blobs {
+    cursor: pointer;
+}
+
+#cross {
+    position: fixed;
+    bottom: 500;
+    right: 500;
+    cursor: pointer;
+}
+
+.name {
+    cursor: pointer;
+}
+
+.name:hover {
+    text-decoration: underline;
+}
+
+div.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    margin: 0% 30%;
+    border-radius: 30px;
+    text-align: center;
+    cursor: pointer;
+}
