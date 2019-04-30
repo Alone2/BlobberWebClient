@@ -346,15 +346,23 @@ function callBlobber(sorting, appendTo, getComment, userId) {
 }
 
 function getBlobberSignedOut(sorting, appendTo, getComment, userId) {
-    $.get(blobberPath + "getText.py", { "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId":userId }, function (data) {
+    var von = 0;
+    if (currentScrollPos - scrollPosForNew > 0){
+        von = currentScrollPos - scrollPosForNew;
+    }
+    $.get(blobberPath + "getText.py", { "sorting": sorting, "von": von, "bis": currentScrollPos, "comment":getComment, "userId":userId }, function (data) {
         getBlobberHandler(data, appendTo);
     });
 }
 
 function getBlobberSignedIn(sorting, appendTo, getComment, userId) {
+    var von = 0;
+    if (currentScrollPos - scrollPosForNew > 0){
+        von = currentScrollPos - scrollPosForNew;
+    }
     // Wenn der Nutzer eingeloggt ist.
     var id_token = getToken();
-    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": currentScrollPos - scrollPosForNew, "bis": currentScrollPos, "comment":getComment, "userId": userId}, function (data) {
+    $.get(blobberPath + "getText.py", { "idTkn": id_token, "sorting": sorting, "von": von, "bis": currentScrollPos, "comment":getComment, "userId": userId}, function (data) {
         getBlobberHandler(data, appendTo);
     });
 }
