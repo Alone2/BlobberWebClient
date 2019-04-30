@@ -8,8 +8,12 @@ var isSignedIn = false;
 var isWindowsApp = false;
 
 var currentScrollPos = 0;
+<<<<<<< HEAD
 const scrollPosForNewConst = 20;
 var scrollPosForNew = scrollPosForNewConst;
+=======
+var scrollPosForNew = 20;
+>>>>>>> e23b3d72ddbc175208eb91a45281babb3e254936
 var homeScrollPos =0;
 var canScroll = true;
 
@@ -243,9 +247,13 @@ function moveOn() {
         console.log(e.target);
         console.log(e.target.className);
         if (e.target.className == "content"){
+<<<<<<< HEAD
             if (sorting != "comment") {
                 showComments(true, e.target.id);
             }
+=======
+            showComments(true, e.target.id);
+>>>>>>> e23b3d72ddbc175208eb91a45281babb3e254936
         }
         if (e.target.className == "name") {
             showUser(true, e.target.id, e.target.innerHTML);
@@ -538,10 +546,15 @@ function showComments(cNew, id) {
     $("#comment").html(new_html);
     $("#the_list_item").unwrap();
     $("#blobInput").attr("placeHolder", "Neuer Kommentar");
+<<<<<<< HEAD
     $("#sendImg").attr("onclick","newBlobber('"+ id +"')");
     $("#cross").removeClass("nodisplay");
     sorting = "comment";
     scrollPosForNew = scrollPosForNewConst;
+=======
+    $("#sendImg").attr("onclick","newBlobber("+ id +")");
+    $("#cross").removeClass("nodisplay");
+>>>>>>> e23b3d72ddbc175208eb91a45281babb3e254936
     getBlobber("new", document.getElementById("blobs"), cNew, id);
 }
 function noShowComments() {
