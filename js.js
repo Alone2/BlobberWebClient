@@ -8,7 +8,8 @@ var isSignedIn = false;
 var isWindowsApp = false;
 
 var currentScrollPos = 0;
-var scrollPosForNew = 20;
+const scrollPosForNewConst = 20;
+var scrollPosForNew = scrollPosForNewConst;
 var homeScrollPos =0;
 var canScroll = true;
 
@@ -242,7 +243,9 @@ function moveOn() {
         console.log(e.target);
         console.log(e.target.className);
         if (e.target.className == "content"){
-            showComments(true, e.target.id);
+            if (sorting != "comment") {
+                showComments(true, e.target.id);
+            }
         }
         if (e.target.className == "name") {
             showUser(true, e.target.id, e.target.innerHTML);
@@ -285,6 +288,10 @@ function moveOn() {
 
 function searchForNew() {
     setTimeout(function () {
+        if (sorting != "new" && sorting != "trending" && sorting != "hot") {
+            searchForNew();
+            return;
+        }
         $.getJSON(blobberPath + "getText.py", {"sorting": current_sorting, "von": 0, "bis": 0, "getLenght":"True"}, function (data) {
             if (maxBlobs < data["lenght"]) {
                 $("#newBlob").removeClass("nodisplay");
@@ -302,13 +309,13 @@ function newBlobber(comment = "") {
     }
     document.getElementById("blobInput").value = "";
 
-    var id_token = getToken();
-
     //wenn der Nutzer nicht angemeldet ist, kann er nichts senden
     if (!isSignedIn) {
         authorizePopup();
         return;
     }
+
+    var id_token = getToken();
 
     $.get(blobberPath + "putText.py", { "idTkn": id_token, "text": value, "comment":comment }, function (data) {
         console.log("put Blobber:" + data);
@@ -531,8 +538,10 @@ function showComments(cNew, id) {
     $("#comment").html(new_html);
     $("#the_list_item").unwrap();
     $("#blobInput").attr("placeHolder", "Neuer Kommentar");
-    $("#sendImg").attr("onclick","newBlobber("+ id +")");
+    $("#sendImg").attr("onclick","newBlobber('"+ id +"')");
     $("#cross").removeClass("nodisplay");
+    sorting = "comment";
+    scrollPosForNew = scrollPosForNewConst;
     getBlobber("new", document.getElementById("blobs"), cNew, id);
 }
 function noShowComments() {
@@ -546,6 +555,8 @@ function showBlobs(cNew) {
     noShowUser();
     noShowComments();
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname);
+    sorting = "new";
+    scrollPosForNew = scrollPosForNewConst;
     getBlobber(current_sorting, document.getElementById("blobs"), cNew);
 }
 function noShowBlobs() {
@@ -558,6 +569,8 @@ function showUser(cNew, user, name) {
     window.history.pushState('Comments', 'Blobber', location.protocol + '//' + location.host + location.pathname + userUrl + user);
     $("#comment").html("<div class='content'><b>"+name+"</b></div>");
     $("#theSender").addClass("nodisplay");
+    sorting = "user";
+    scrollPosForNew = scrollPosForNewConst;
     getBlobber("user", document.getElementById("blobs"), cNew, "", user);
 }
 function noShowUser() {
