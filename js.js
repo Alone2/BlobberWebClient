@@ -24,7 +24,7 @@ let client = new jso.JSO({
     providerID: "google",
     client_id: "275158525519-85frhpipfiqpn0414mhnaaookojo5g0j.apps.googleusercontent.com",
     authorization: "https://accounts.google.com/o/oauth2/auth",
-    redirect_uri: location.protocol + '//' + location.host + location.pathname + "popUp.html",
+    redirect_uri: location.protocol + '//' + location.host + location.pathname + "?signIn=true",
     scopes: { 
         request: ["https://www.googleapis.com/auth/userinfo.profile"]
     },
@@ -38,9 +38,8 @@ function authorizePopup() {
     opt = {};
     if (!isWindowsApp) {
         client.setLoader(jso.Popup);
-    } else {
         opt = {
-            redirect_uri: location.protocol + '//' + location.host + location.pathname + "?signIn=true"
+            redirect_uri: location.protocol + '//' + location.host + location.pathname + "popUp.html",
         }
     }
     client.getToken(opt)
