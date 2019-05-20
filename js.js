@@ -17,6 +17,8 @@ var maxBlobs = 0;
 var current_sorting = "new";
 var hereAmI = window.location.href
 
+var globalIdToken = "";
+
 
 //
 // SIGN IN STUFF
@@ -65,8 +67,11 @@ function onSignIn() {
 }
 
 function getToken() {
-    var token = client.getToken({})["_v"]["id_token"]
-    return token
+    //var token = client.getToken({response_type: 'id_token token'})["_v"]["id_token"]
+    client.getToken({response_type: 'id_token'}).then((token) => {
+		globalIdToken = token["id_token"];
+	});
+    return globalIdToken
 }
 
 function logOut() {
@@ -161,7 +166,7 @@ window.onload = function (event) {
 }
 
 function stuffToTheRightPlace() {
-    document.getElementById("contentHolder").style.height = window.innerHeight - 102 + "px";
+    document.getElementById("contentHolder").style.height = window.innerHeight - 103 + "px";
     document.getElementById("contentHolder").style.paddingLeft = (window.innerWidth- 1200)/2 + "px";
     document.getElementById("contentHolder").style.paddingRight = (window.innerWidth- 1200)/2 + "px";
     if ((window.innerWidth - 1200)/2 < 20) {
